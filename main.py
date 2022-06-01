@@ -8,7 +8,7 @@ parser = argparse.ArgumentParser(prog='magicgenerator')
 "zdefiniujmy typ readabe dla path_to_save_file - sprawdzimy czy istnieje, jesli nie wyrzucimy error +rowniez w loggach"
 def existing_file(prospective_dir):
     isdir = os.path.isdir(path_to_save_files)
-    """Jak to poprawic bo odwoluje sie sama do siebie """
+    """Jak to poprawic bo odwoluje sie sama do siebie jo jo test """
     try:
         isdir
         return prospective_dir
@@ -74,7 +74,7 @@ logging.basicConfig(filename="log.log",
                     level=logging.INFO,
                     filemode="w", format='%(asctime)s %(message)s')
 
-logging.debug("Debug")
+logging.debug("Debug wybuchnie")
 logging.info("Info")
 logging.warning("Warning")
 logging.error("Error")
