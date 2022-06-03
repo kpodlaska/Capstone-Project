@@ -7,8 +7,24 @@ import os
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s:%(levelname)s:%(pathname)s:%(message)s')
 parser = argparse.ArgumentParser(prog='magicgenerator')
-"""
-"zdefiniujmy typ readabe dla path_to_save_file - sprawdzimy czy istnieje, jesli nie wyrzucimy error +rowniez w loggach"
+
+
+parser.add_argument('--path_to_save_files', help="Define a path to output file. For current path use '.', As deflaut is ./Capstone", type=str, default="/Capstone")
+parser.add_argument('--files_count', help="Define how many json file do you want to generate", type=int)
+parser.add_argument('--file_name', help="Choose name to your file", type=str)
+parser.add_argument('--file_prefix', help="If you chose more than 1 output file please choose prefix", type=str,
+                    choices=['count','random', 'uuid'])
+parser.add_argument('--data_schema', help='Provide data Schema for your output files')
+parser.add_argument('--data_lines', help='How many lines your output file has')
+parser.add_argument('--clear_path', help='If this flag is on, before the script starts creating new data files, all files in path_to_save_files that match file_name will be deleted.')
+parser.add_argument('--multiprocessing', help='The number of processes used to create files')
+args = parser.parse_args()
+
+logging.info('Current path : {}'.format(args.path_to_save_files))
+logging.info('You choose to generate {} files'.format(args.files_count))
+logging.debug('Name of your files is {} with prefixes {}. Every file have {} lines'.format(args.file_name,args.file_prefix,args.data_lines))
+
+
 def existing_file(prospective_dir):
     isdir = os.path.isdir(path_to_save_files)
     try:
@@ -17,36 +33,13 @@ def existing_file(prospective_dir):
     except TypeError:
         print("Check the path one more time")
         logging.critical("DIR not exsist!!")
-"""
 
-parser.add_argument('--path_to_save_files', help="Define a path to output file. For current path use '.', As deflaut is ./Capstone", type=str, default="/Capstone")
-parser.add_argument('--files_count', help="Define how many json file do you want to generate", type=int)
-parser.add_argument('--file_name', help="Choose name to your file", type=str)
-parser.add_argument('--file_prefix', help="If you chose more than 1 output file please choose prefix", type=str,
-                    choices=['count','random', 'uuid'])
-#parser.add_argument('--data_schema', help='Provide data Schema for your output files')
-parser.add_argument('--data_lines', help='How many lines your output file has')
-#parser.add_argument('--clear_path', help='If this flag is on, before the script starts creating new data files, all files in path_to_save_files that match file_name will be deleted.')
-#parser.add_argument('--multiprocessing', help='The number of processes used to create files')
-args = parser.parse_args()
-
-print("Aktualna ścieżka to ", args.path_to_save_files)
-logging.info('Current path : {}'.format(args.path_to_save_files))
-logging.info('You choose to generate {} files'.format(args.files_count))
-logging.debug('Name of your files is {} with prefixes {}. Every file have {} lines'.format(args.file_name,args.file_prefix,args.data_lines))
-
-"""
-a=args.path_to_save_files
-print(a)
-if args.path_to_save_files:
-
-    print("Jesteś w pliku bieżącym")
 
 if args.files_count < 0:
-    print("Incorrect value")
-    logging.error("There is no possibility to genereate those number of files. Put positive number or zero to generate answear without output files")
+    logging.error("Incorrect value!!! There is no possibility to genereate {}. Put positive number or zero to generate answear without output files".forma(args.files_count))
 if args.files_count == 0:
-    print("Result:")
+    print("You choose to print result on screen:")
+    print("Result")
 if args.files > 0:
     print("tu dopisz resztę programu dla wyniku więcej niz 0")
     counter=args.files
