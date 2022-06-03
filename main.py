@@ -5,7 +5,7 @@ import configparser
 import uuid
 import os
 
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s:%(levelname)s:%(pathname)s:%(message)s')
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s | %(levelname)s | %(pathname)s | %(message)s')
 parser = argparse.ArgumentParser(prog='magicgenerator')
 
 
@@ -25,8 +25,8 @@ logging.info('You choose to generate {} files'.format(args.files_count))
 logging.debug('Name of your files is {} with prefixes {}. Every file have {} lines'.format(args.file_name,args.file_prefix,args.data_lines))
 
 
-def existing_file(prospective_dir):
-    isdir = os.path.isdir(path_to_save_files)
+def existing_dir(prospective_dir):
+    isdir = os.path.isdir(args.path_to_save_files)
     try:
         isdir
         return prospective_dir
@@ -35,18 +35,27 @@ def existing_file(prospective_dir):
         logging.critical("DIR not exsist!!")
 
 
+
+
+
+if args.path_to_save_files==".":
+    path = os.getcwd()
+    logging.debug("You are in current directory. Path :".format(path))
+else:
+    path=existing_dir(args.path_to_save_files)
+    logging.debug("Path :", format(path))
+
+
 if args.files_count < 0:
     logging.error("Incorrect value!!! There is no possibility to genereate {}. Put positive number or zero to generate answear without output files".forma(args.files_count))
 if args.files_count == 0:
-    print("You choose to print result on screen:")
-    print("Result")
-if args.files > 0:
-    print("tu dopisz resztę programu dla wyniku więcej niz 0")
-    counter=args.files
+    logging.debug("Generate result:")
+if args.files_count > 0:
+    logging.info("Generate {} files. Here is the result".format(args.files_count))
+    counter=args.files_count
 
 if args.file_name and args.file_prefix=="-count":
     print("Creating multiple files with count method prefix")
-
 
 if args.file_name and args.file_prefix=="--random":
     print("Creating multiple files with random method prefix")
@@ -54,6 +63,9 @@ if args.file_name and args.file_prefix=="--random":
 if args.file_name and args.file_prefix=="--uuid":
     print("Creating multiple files with uuid method prefix")
 
+
+
+"""
 config = configparser.ConfigParser()
 config['DEFAULT'] = {'ServerAliveInterval': '45',
                      'Compression': 'yes',
@@ -70,14 +82,4 @@ with open('example.ini', 'w') as configfile:
     config.write(configfile)
 
 print('If you read this line it means that you have provided '
-      'all the parameters')
-
-logging.basicConfig(filename="log.log",
-                    level=logging.INFO,
-                    filemode="w", format='%(asctime)s %(message)s')
-
-logging.debug("Debug wybuchnie")
-logging.info("Info")
-logging.warning("Warning")
-logging.error("Error")
-logging.critical("Critical")"""
+      'all the parameters')"""
