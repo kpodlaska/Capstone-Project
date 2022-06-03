@@ -35,6 +35,7 @@ def existing_dir(prospective_dir):
         logging.critical("DIR not exsist!!")
 
 
+existing_dir("/Castone")
 
 
 
@@ -44,7 +45,7 @@ if args.path_to_save_files==".":
 else:
     path=existing_dir(args.path_to_save_files)
     logging.debug("Path :", format(path))
-
+#cos tu nie dziala
 
 if args.files_count < 0:
     logging.error("Incorrect value!!! There is no possibility to genereate {}. Put positive number or zero to generate answear without output files".forma(args.files_count))
