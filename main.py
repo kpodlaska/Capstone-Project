@@ -60,30 +60,26 @@ def init_logger():
     logging.basicConfig(level=logging.DEBUG, format='%(asctime)s | %(levelname)s | %(pathname)s | %(message)s')
     return None
 
-def construct_files(file_name, prefix):
+def construct_files(file_name, prefix, how_many_files):
     ext="json"
-    parsed_args = init_arg_parser()
-    file_name=parsed_args.file_name
-    how_many_files=parsed_args.files_count
-    prefixes=[]
-    if prefix=="count":
+    prefixes = []
+    if prefix == "count":
         for n in range(how_many_files):
             prefixes.append(str(n+1))
-    if prefix=="random":
-        i = 0
-        while i < how_many_files:
-            number = random.randint(1, maksliczba)
-            if prefixes.count(liczba) == 0:
-                prefixes.append(number)
-                i = i + 1
-    if prefix=="uuid":
-        for i in range(4):
-            x_i = uuid.uuid4()
-            prefixes.append(x_i)
-    full_filenames=[]
+    elif prefix == "random":
+        for n in range(how_many_files):
+            number=random.randint(1,1_000_000_000_000)
+            prefixes.append(number)
+    elif prefix == "uuid":
+        for n in range(how_many_files):
+            x_n = uuid.uuid4()
+            prefixes.append(x_n)
+
+    full_filenames = []
     for prefix_ in prefixes:
-        full_filename=file_name+prefix_+"."+ext
+        full_filename = file_name+"_" + str(prefix_) + "."+ext
         full_filenames.append(full_filename)
+
     return full_filenames
 
 

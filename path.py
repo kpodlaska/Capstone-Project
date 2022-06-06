@@ -1,39 +1,43 @@
-
-# Python program to explain os.getcwd() method
-
-# importing os module
-import os
+import logging
+import argparse
+import configparser
 import uuid
+import os
+import random
 
-# Get the current working
-# directory (CWD)
+def construct_files(file_name, prefix, how_many_files):
+    ext="json"
+    prefixes = []
+    if prefix == "count":
+        for n in range(how_many_files):
+            prefixes.append(str(n+1))
+    elif prefix == "random":
+        for n in range(how_many_files):
+            number=random.randint(1,1_000_000_000_000)
+            prefixes.append(number)
+    elif prefix == "uuid":
+        for n in range(how_many_files):
+            x_n = uuid.uuid4()
+            prefixes.append(x_n)
 
+    full_filenames = []
+    for prefix_ in prefixes:
+        full_filename = file_name+"_" + str(prefix_) + "."+ext
+        full_filenames.append(full_filename)
 
-"""
-def existing_dir(prospective_dir):
-    isdir = os.path.isdir(args.path_to_save_files)
-    try:
-        isdir
-        return prospective_dir
-    except TypeError:
-        print("Check the path one more time")
-        logging.critical("DIR not exsist!!")
+    return full_filenames
 
-
-existing_dir("/Castone")
-
-
-if args.path_to_save_files==".":
-    path = os.getcwd()
-    logging.debug("You are in current directory. Path :".format(path))
-else:
-    path=existing_dir(args.path_to_save_files)
-    logging.debug("Path :", format(path))
-#cos tu nie dziala"""
-lista=[]
-for i in range(4):
-    x_i=uuid.uuid4()
-    lista.append(x_i)
-    print(x_i)
-print(lista)
-print(lista[0])
+y=construct_files("super","count", 4)
+print("test 1",y)
+y=construct_files("super","count", 100)
+print("test 2",y)
+y=construct_files("super","count", -7)
+print("test 3",y)
+y=construct_files("super", "uuid", 90)
+print("test 4",y)
+y=construct_files("super", "uuid", 30)
+print("test 5",y)
+y=construct_files("super", "uuid", 37)
+print("test 6",y)
+y=construct_files("super", "random", 37)
+print("test 7",y)
