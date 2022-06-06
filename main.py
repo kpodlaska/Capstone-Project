@@ -66,21 +66,26 @@ def construct_files(file_name, prefix):
     file_name=parsed_args.file_name
     how_many_files=parsed_args.files_count
     prefixes=[]
-    if prefix="count":
+    if prefix=="count":
         for n in range(how_many_files):
             prefixes.append(str(n+1))
-    if prefix="random":
+    if prefix=="random":
         i = 0
         while i < how_many_files:
             number = random.randint(1, maksliczba)
             if prefixes.count(liczba) == 0:
                 prefixes.append(number)
                 i = i + 1
-    if prefix="uuid":
+    if prefix=="uuid":
         for i in range(4):
             x_i = uuid.uuid4()
             prefixes.append(x_i)
-    # I get list of prefixes
+    full_filenames=[]
+    for prefix_ in prefixes:
+        full_filename=file_name+prefix_+"."+ext
+        full_filenames.append(full_filename)
+    return full_filenames
+
 
 
 
