@@ -29,14 +29,6 @@ def init_arg_parser():
     return args
 
 
-def existing_dir(prospective_dir):
-    """
-    Not sure what you expect this
-    function to do
-    :param prospective_dir:
-    :return: what you expect as return?
-    """
-    return os.path.isdir(prospective_dir)
 
 
 """
@@ -67,6 +59,30 @@ def init_logger():
     """
     logging.basicConfig(level=logging.DEBUG, format='%(asctime)s | %(levelname)s | %(pathname)s | %(message)s')
     return None
+
+def construct_files(file_name, prefix):
+    ext="json"
+    parsed_args = init_arg_parser()
+    file_name=parsed_args.file_name
+    how_many_files=parsed_args.files_count
+    prefixes=[]
+    if prefix="count":
+        for n in range(how_many_files):
+            prefixes.append(str(n+1))
+    if prefix="random":
+        i = 0
+        while i < how_many_files:
+            number = random.randint(1, maksliczba)
+            if prefixes.count(liczba) == 0:
+                prefixes.append(number)
+                i = i + 1
+    if prefix="uuid":
+        for i in range(4):
+            x_i = uuid.uuid4()
+            prefixes.append(x_i)
+    # I get list of prefixes
+
+
 
 
 def main():
@@ -105,7 +121,7 @@ def main():
             logging.error("Incorrect value!!! There is no possibility to genereate {}. Put positive number or zero to "
                           "generate answer without output files".format(parsed_args.files_count))
         elif parsed_args.files_count == 0:
-            logging.debug("Generate result:")  # What you want to do here?
+            logging.debug("Generate result:")  # What you want to do here? -Print result without creating JSON file
         elif parsed_args.files_count > 0:
             logging.info("Generate {} files. Here is the result".format(parsed_args.files_count))
             counter = parsed_args.files_count
