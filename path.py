@@ -8,7 +8,7 @@ import json
 from faker import Faker
 import re
 f_name = "test.json"
-d_schema = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": \"['client', 'partner', 'government']\",\"age\": \"int:rand(1, 90)\"}"
+d_schema = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": \"['client', 'partner', 'government']\",\"animal_type\": \"['cat', 'dog', 'monkey','tiger']\",\"age\": \"int:rand(1, 90)\",\"kids_number\": \"int:rand(1, 6)\"}"
 
 schema_dict=json.loads(d_schema)
 schema_keys=schema_dict.keys()
@@ -25,8 +25,6 @@ separators=[]
 def create_list_of_fake_data(data_types):
     result=[]
     possibilities=list(data_types)
-    print(possibilities)
-    print((possibilities),type(possibilities))
     for possibility in possibilities:
         if "int" in possibility:
             if "rand" in possibility and len(possibility)>3:
@@ -54,7 +52,6 @@ def create_list_of_fake_data(data_types):
             fake=Faker()
             value=fake.pystr()
             result.append(value)
-    print("to jest wynik fukncji creating_fake_list:",result)
     return result
 
 def creating_fake_dict(keys,values):
@@ -64,3 +61,7 @@ def creating_fake_dict(keys,values):
 values=create_list_of_fake_data(schema_data_types)
 
 creating_fake_dict(schema_keys,values)
+
+"""next step is to put everything into main and create function which generate huge amount on data based on schema,
+It will consume a lot of CPU so please give me some feedback about code above.
+I wonder if data created for name is ok. In sample is different format. Millisecond with timestamp still unresolved."""
