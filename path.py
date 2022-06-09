@@ -8,12 +8,18 @@ import json
 from faker import Faker
 import re
 from string import ascii_lowercase
-f_name = "test.json"
-d_schema = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": \"['client', 'partner', 'government']\",\"animal_type\": \"['cat', 'dog', 'monkey','tiger']\",\"age\": \"int:rand(1, 90)\",\"kids_number\": \"int:rand(1, 6)\"}"
 
-schema_dict=json.loads(d_schema)
-schema_keys=schema_dict.keys()
-schema_data_types=schema_dict.values()
+def creating_fake_data_from_schema(schema, file_name):
+    f_name = file_name
+    d_schema=schema
+    d_schema = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": \"['client', 'partner', 'government']\",\"animal_type\": \"['cat', 'dog', 'monkey','tiger']\",\"age\": \"int:rand(1, 90)\",\"kids_number\": \"int:rand(1, 6)\"}"
+    schema_dict=json.loads(d_schema)
+    schema_keys=schema_dict.keys()
+    schema_data_types=schema_dict.values()
+    values = create_list_of_fake_data(schema_data_types)
+    result=creating_fake_dict(schema_keys, values)
+    print(result)
+    return result
 
 def creating_fake_timestamp():
     fake = Faker()
@@ -67,13 +73,19 @@ def create_list_of_fake_data(data_types):
             result.append(value)
     return result
 
+
+
 def creating_fake_dict(keys,values):
     f_dict = dict(zip(keys, values))
-    print(f_dict)
+    return f_dict
 
-values=create_list_of_fake_data(schema_data_types)
 
-creating_fake_dict(schema_keys,values)
+d_schema = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": \"['client', 'partner', 'government']\",\"animal_type\": \"['cat', 'dog', 'monkey','tiger']\",\"age\": \"int:rand(1, 90)\",\"kids_number\": \"int:rand(1, 6)\"}"
+
+creating_fake_data_from_schema(d_schema, "test.txt")
+#values=create_list_of_fake_data(schema_data_types)
+
+#creating_fake_dict(schema_keys,values)
 
 """next step is to put everything into main and create function which generate huge amount on data based on schema,
 It will consume a lot of CPU so please give me some feedback about code above.
