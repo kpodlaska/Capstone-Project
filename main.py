@@ -4,7 +4,11 @@ import argparse
 import configparser
 import uuid
 import os
+from path import creating_fake_data_from_schema
+#TODO: change d_schema from argparse
+d_schema = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": \"['client', 'partner', 'government']\",\"animal_type\": \"['cat', 'dog', 'monkey','tiger']\",\"age\": \"int:rand(1, 90)\",\"kids_number\": \"int:rand(1, 6)\"}"
 
+creating_fake_data_from_schema(d_schema, "test.txt")
 
 def init_arg_parser():
     parser = argparse.ArgumentParser(prog='magicgenerator')
@@ -82,8 +86,19 @@ def construct_files(file_name, prefix, how_many_files):
 
     return full_filenames
 
-
-
+def creating_name_from_numbers_and_lowercase():
+    numbers='0123456789'
+    symbol='-'
+    all =  ascii_lowercase + numbers
+    lenght_1 = 8
+    lenght_2 = 4
+    lenght_3 = 12
+    mid_lenght_part ="".join(random.sample(all, lenght_1))
+    short_lenght_part = "".join(random.sample(all, lenght_2))
+    long_lenght_part = "".join(random.sample(all, lenght_3))
+    name =mid_lenght_part+symbol+(short_lenght_part+symbol)*3+long_lenght_part
+    return name
+#TODO: define existing_dir, cause I cancel previous one
 
 
 def main():

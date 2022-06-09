@@ -1,12 +1,16 @@
-from faker import Faker
-from datetime import datetime
+from string import ascii_lowercase
 import random
-def creating_fake_timestamp():
-    fake = Faker()
-    some_data = fake.date_time_between(start_date='-15y', end_date='now')
-    some_data=some_data.replace(microsecond=random.randint(0,999_999))
-    some_data=some_data.timestamp()
-    value = some_data
-    return value
-    #TODO: add miliseconds
-print(creating_fake_timestamp())
+def creating_name_from_numbers_and_lowercase():
+    numbers='0123456789'
+    symbol='-'
+    all =  ascii_lowercase + numbers
+    lenght_1 = 8
+    lenght_2 = 4
+    lenght_3 = 12
+    mid_lenght_part ="".join(random.sample(all, lenght_1))
+    short_lenght_part = "".join(random.sample(all, lenght_2))
+    long_lenght_part = "".join(random.sample(all, lenght_3))
+    name =mid_lenght_part+symbol+(short_lenght_part+symbol)*3+long_lenght_part
+    return name
+
+creating_name_from_numbers_and_lowercase()

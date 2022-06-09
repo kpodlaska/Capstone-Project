@@ -8,7 +8,6 @@ import json
 from faker import Faker
 import re
 
-
 def create_fake_timestamp():
     fake = Faker()
     some_data = fake.date_time_between(start_date='-15y', end_date='now')
@@ -17,7 +16,7 @@ def create_fake_timestamp():
     value = some_data
     return value
 
-
+  
 def create_list_of_fake_data(data_types):
     result = []
     possibilities = list(data_types)
