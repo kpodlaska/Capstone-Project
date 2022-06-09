@@ -53,7 +53,6 @@ def create_fake_dict(data_schema):
     schema_dict = json.loads(d_schema)
     schema_keys = schema_dict.keys()
     schema_data_types = schema_dict.values()
-
     f_values = create_list_of_fake_data(schema_data_types)
     f_dict = dict(zip(schema_keys, f_values))
     return f_dict
