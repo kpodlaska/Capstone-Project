@@ -17,9 +17,10 @@ schema_data_types=schema_dict.values()
 def creating_fake_timestamp():
     fake = Faker()
     some_data = fake.date_time_between(start_date='-15y', end_date='now')
-    value = some_data.timestamp()
+    some_data=some_data.replace(microsecond=random.randint(0,999_999))
+    some_data=some_data.timestamp()
+    value = some_data
     return value
-    #TODO: add miliseconds
 
 separators=[]
 def create_list_of_fake_data(data_types):
