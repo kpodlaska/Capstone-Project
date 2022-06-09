@@ -7,6 +7,7 @@ import random
 import json
 from faker import Faker
 import re
+from string import ascii_lowercase
 f_name = "test.json"
 d_schema = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": \"['client', 'partner', 'government']\",\"animal_type\": \"['cat', 'dog', 'monkey','tiger']\",\"age\": \"int:rand(1, 90)\",\"kids_number\": \"int:rand(1, 6)\"}"
 
@@ -22,7 +23,19 @@ def creating_fake_timestamp():
     value = some_data
     return value
 
-separators=[]
+def creating_name_from_numbers_and_lowercase():
+    numbers='0123456789'
+    symbol='-'
+    all =  ascii_lowercase + numbers
+    lenght_1 = 8
+    lenght_2 = 4
+    lenght_3 = 12
+    mid_lenght_part ="".join(random.sample(all, lenght_1))
+    short_lenght_part = "".join(random.sample(all, lenght_2))
+    long_lenght_part = "".join(random.sample(all, lenght_3))
+    name =mid_lenght_part+symbol+(short_lenght_part+symbol)*3+long_lenght_part
+    return name
+
 def create_list_of_fake_data(data_types):
     result=[]
     possibilities=list(data_types)
@@ -50,8 +63,7 @@ def create_list_of_fake_data(data_types):
             value=random.choice(x)
             result.append(value)
         elif "str" in possibility and "rand" in possibility:
-            fake=Faker()
-            value=fake.pystr()
+            value=creating_name_from_numbers_and_lowercase()
             result.append(value)
     return result
 
