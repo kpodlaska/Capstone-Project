@@ -40,7 +40,7 @@ def existing_dir(prospective_dir):
     except TypeError:
         logging.critical("DIR is not exist!")
 
-
+print(existing_dir(os.getcwd()))
 """
 config = configparser.ConfigParser()
 config['DEFAULT'] = {'ServerAliveInterval': '45',
@@ -105,8 +105,13 @@ def creating_name_from_numbers_and_lowercase():
     name =mid_lenght_part+symbol+(short_lenght_part+symbol)*3+long_lenght_part
     return name
 #TODO: define existing_dir, cause I cancel previous one
+"""
+def create_files_into_dir(path, file_name):
 
+    f_path=path+
+    with open(file_name,"w") as f:
 
+"""
 def main():
     """
     Having main helps organize code,
@@ -156,7 +161,22 @@ def main():
     #
     # if args.file_name and args.file_prefix == "--uuid":
     #     print("Creating multiple files with uuid method prefix")
+    if int(parsed_args.files_count) > 0 and parsed_args.file_name and parsed_args.file_prefix\
+            and parsed_args.path_to_save_files and parsed_args.data_lines and parsed_args.data_schema:
+        new_files=construct_files(parsed_args.file_name, parsed_args.file_prefix, parsed_args.files_count)
+        for new_file in new_files:
+            new_path=existing_dir(parsed_args.path_to_save_files)
+            file_from_dir = new_path + new_file
+            fake_data = create_fake_dict(parsed_args.data_schema)
+            with open(file_from_dir, "w") as f:
+                json.dump(fake_data, f)
+            with open(file_from_dir, "r") as read_it:
+                data = json.load(read_it)
 
+
+#path_f="Users/kpodlaska/Desktop/"
+#file="klucz.txt"
+#print(existing_dir(path_f))
 
 if __name__ == '__main__':
     main()
