@@ -4,11 +4,11 @@ import argparse
 import configparser
 import uuid
 import os
-from path import creating_fake_data_from_schema
+import path
 #TODO: change d_schema from argparse
 d_schema = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": \"['client', 'partner', 'government']\",\"animal_type\": \"['cat', 'dog', 'monkey','tiger']\",\"age\": \"int:rand(1, 90)\",\"kids_number\": \"int:rand(1, 6)\"}"
 
-creating_fake_data_from_schema(d_schema, "test.txt")
+path.create_fake_dict(d_schema)
 
 def init_arg_parser():
     parser = argparse.ArgumentParser(prog='magicgenerator')
@@ -32,7 +32,13 @@ def init_arg_parser():
 
     return args
 
-
+def existing_dir(prospective_dir):
+    isdir = os.path.isdir(prospective_dir)
+    try:
+        isdir is True
+        return prospective_dir
+    except TypeError:
+        logging.critical("DIR is not exist!")
 
 
 """
