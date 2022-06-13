@@ -5,6 +5,8 @@ import configparser
 import uuid
 import os
 import creating_fake_data
+import json
+from faker import Faker
 #TODO: change d_schema from argparse
 #d_schema = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": \"['client', 'partner', 'government']\",\"animal_type\": \"['cat', 'dog', 'monkey','tiger']\",\"age\": \"int:rand(1, 90)\",\"kids_number\": \"int:rand(1, 6)\"}"
 
@@ -17,7 +19,7 @@ def init_arg_parser():
     parser.add_argument('--path_to_save_files',
                         help="Define a path to output file. For current path use '.', As deflaut is ./Capstone",
                         type=str,
-                        default="/Capstone")
+                        default="/Users/kpodlaska/PycharmProjects/pythonProject/Capstone")
     parser.add_argument('--files_count', help="Define how many json file do you want to generate", type=int)
     parser.add_argument('--file_name', help="Choose name to your file", type=str)
     parser.add_argument('--file_prefix', help="If you chose more than 1 output file please choose prefix", type=str,
@@ -124,7 +126,7 @@ def main():
     init_logger()
     parsed_args = init_arg_parser()
     logging.info(parsed_args)
-    if existing_dir("/Capstone"):
+    if existing_dir(parsed_args.path_to_save_files):
         logging.info("Correct path to folder")
     else:
         logging.info("Directory doesn't exist!")
@@ -171,15 +173,12 @@ def main():
             else:
                 file_from_dir=new_path + "/" + new_file
             fake_data = creating_fake_data.create_fake_dict(parsed_args.data_schema)
-            with open(file_from_dir, "xt") as f:
+            with open(file_from_dir, "w") as f:
                 json.dump(fake_data, f)
             with open(file_from_dir, "r") as read_it:
                 data = json.load(read_it)
 
 
-#path_f="Users/kpodlaska/Desktop/"
-#file="klucz.txt"
-#print(existing_dir(path_f))
 
 if __name__ == '__main__':
     main()
