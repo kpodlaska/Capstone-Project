@@ -7,7 +7,7 @@ import os
 import creating_fake_data
 import json
 from faker import Faker
-#TODO: change d_schema from argparse
+
 #d_schema = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": \"['client', 'partner', 'government']\",\"animal_type\": \"['cat', 'dog', 'monkey','tiger']\",\"age\": \"int:rand(1, 90)\",\"kids_number\": \"int:rand(1, 6)\"}"
 
 #print(creating_fake_data.create_fake_dict(d_schema))
