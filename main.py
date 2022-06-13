@@ -7,7 +7,6 @@ import os
 import creating_fake_data
 import json
 from faker import Faker
-
 #TODO: change d_schema from argparse
 #d_schema = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": \"['client', 'partner', 'government']\",\"animal_type\": \"['cat', 'dog', 'monkey','tiger']\",\"age\": \"int:rand(1, 90)\",\"kids_number\": \"int:rand(1, 6)\"}"
 
@@ -44,7 +43,7 @@ def existing_dir(prospective_dir):
     except TypeError:
         logging.critical("DIR is not exist!")
 
-
+print(existing_dir(os.getcwd()))
 """
 config = configparser.ConfigParser()
 config['DEFAULT'] = {'ServerAliveInterval': '45',
@@ -72,7 +71,6 @@ def init_logger():
     :return:
     """
     logging.basicConfig(level=logging.DEBUG, format='%(asctime)s | %(levelname)s | %(pathname)s | %(message)s')
-    logging.getLogger('faker').setLevel(logging.ERROR)
     return None
 
 def construct_files(file_name, prefix, how_many_files):
@@ -89,7 +87,6 @@ def construct_files(file_name, prefix, how_many_files):
         for n in range(how_many_files):
             x_n = uuid.uuid4()
             prefixes.append(x_n)
-#TODO: check what happen if random or uuid prefixes duplicate
 
     full_filenames = []
     for prefix_ in prefixes:
@@ -110,8 +107,7 @@ def creating_name_from_numbers_and_lowercase():
     long_lenght_part = "".join(random.sample(all, lenght_3))
     name =mid_lenght_part+symbol+(short_lenght_part+symbol)*3+long_lenght_part
     return name
-
-#TODO: correct existing_dir, cause I cancel previous one
+#TODO: define existing_dir, cause I cancel previous one
 """
 def create_files_into_dir(path, file_name):
 
@@ -141,7 +137,7 @@ def main():
                   f'Every file have {parsed_args.data_lines} lines')
 
     if parsed_args.path_to_save_files == ".":
-        path = os.path.abspath('./')
+        path = os.getcwd()
         logging.debug(f"You are in current directory. Path : {path}")
     else:
         path = existing_dir(parsed_args.path_to_save_files)
@@ -170,18 +166,7 @@ def main():
     #     print("Creating multiple files with uuid method prefix")
     if parsed_args.files_count and parsed_args.file_name and parsed_args.file_prefix and parsed_args.path_to_save_files and parsed_args.data_lines and parsed_args.data_schema:
         new_files=construct_files(parsed_args.file_name, parsed_args.file_prefix, parsed_args.files_count)
-        print("wszystkie konieczne warunki zaszly")
-        print(new_files, type(new_files))
         for new_file in new_files:
-            data = creating_fake_data.create_fake_dict(parsed_args.data_schema)
-            print(new_file, data)
-            dir_path = existing_dir(parsed_args.path_to_save_files)
-            new_file_path = os.path.join(dir_path, new_file)
-            print(new_file_path)
-            with open(new_file_path,"w") as f:
-                json.dump(fake_data, f)
-
-    """        for new_file in new_files:
             new_path=existing_dir(parsed_args.path_to_save_files)
             if new_path.endswith("/"):
                 file_from_dir = new_path + new_file
@@ -193,7 +178,7 @@ def main():
             with open(file_from_dir, "r") as read_it:
                 data = json.load(read_it)
 
-"""
+
 
 if __name__ == '__main__':
     main()
