@@ -5,6 +5,9 @@ import configparser
 import uuid
 import os
 import creating_fake_data
+import json
+from faker import Faker
+
 #TODO: change d_schema from argparse
 #d_schema = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": \"['client', 'partner', 'government']\",\"animal_type\": \"['cat', 'dog', 'monkey','tiger']\",\"age\": \"int:rand(1, 90)\",\"kids_number\": \"int:rand(1, 6)\"}"
 
@@ -17,7 +20,7 @@ def init_arg_parser():
     parser.add_argument('--path_to_save_files',
                         help="Define a path to output file. For current path use '.', As deflaut is ./Capstone",
                         type=str,
-                        default="/Capstone")
+                        default="/Users/kpodlaska/PycharmProjects/pythonProject/Capstone")
     parser.add_argument('--files_count', help="Define how many json file do you want to generate", type=int)
     parser.add_argument('--file_name', help="Choose name to your file", type=str)
     parser.add_argument('--file_prefix', help="If you chose more than 1 output file please choose prefix", type=str,
@@ -41,7 +44,7 @@ def existing_dir(prospective_dir):
     except TypeError:
         logging.critical("DIR is not exist!")
 
-print(existing_dir(os.getcwd()))
+
 """
 config = configparser.ConfigParser()
 config['DEFAULT'] = {'ServerAliveInterval': '45',
@@ -69,6 +72,7 @@ def init_logger():
     :return:
     """
     logging.basicConfig(level=logging.DEBUG, format='%(asctime)s | %(levelname)s | %(pathname)s | %(message)s')
+    logging.getLogger('faker').setLevel(logging.ERROR)
     return None
 
 def construct_files(file_name, prefix, how_many_files):
@@ -85,6 +89,7 @@ def construct_files(file_name, prefix, how_many_files):
         for n in range(how_many_files):
             x_n = uuid.uuid4()
             prefixes.append(x_n)
+#TODO: check what happen if random or uuid prefixes duplicate
 
     full_filenames = []
     for prefix_ in prefixes:
@@ -105,7 +110,8 @@ def creating_name_from_numbers_and_lowercase():
     long_lenght_part = "".join(random.sample(all, lenght_3))
     name =mid_lenght_part+symbol+(short_lenght_part+symbol)*3+long_lenght_part
     return name
-#TODO: define existing_dir, cause I cancel previous one
+
+#TODO: correct existing_dir, cause I cancel previous one
 """
 def create_files_into_dir(path, file_name):
 
@@ -124,7 +130,7 @@ def main():
     init_logger()
     parsed_args = init_arg_parser()
     logging.info(parsed_args)
-    if existing_dir("/Capstone"):
+    if existing_dir(parsed_args.path_to_save_files):
         logging.info("Correct path to folder")
     else:
         logging.info("Directory doesn't exist!")
@@ -135,7 +141,7 @@ def main():
                   f'Every file have {parsed_args.data_lines} lines')
 
     if parsed_args.path_to_save_files == ".":
-        path = os.getcwd()
+        path = os.path.abspath('./')
         logging.debug(f"You are in current directory. Path : {path}")
     else:
         path = existing_dir(parsed_args.path_to_save_files)
@@ -164,22 +170,30 @@ def main():
     #     print("Creating multiple files with uuid method prefix")
     if parsed_args.files_count and parsed_args.file_name and parsed_args.file_prefix and parsed_args.path_to_save_files and parsed_args.data_lines and parsed_args.data_schema:
         new_files=construct_files(parsed_args.file_name, parsed_args.file_prefix, parsed_args.files_count)
+        print("wszystkie konieczne warunki zaszly")
+        print(new_files, type(new_files))
         for new_file in new_files:
+            data = creating_fake_data.create_fake_dict(parsed_args.data_schema)
+            print(new_file, data)
+            dir_path = existing_dir(parsed_args.path_to_save_files)
+            new_file_path = os.path.join(dir_path, new_file)
+            print(new_file_path)
+            with open(new_file_path,"w") as f:
+                json.dump(fake_data, f)
+
+    """        for new_file in new_files:
             new_path=existing_dir(parsed_args.path_to_save_files)
             if new_path.endswith("/"):
                 file_from_dir = new_path + new_file
             else:
                 file_from_dir=new_path + "/" + new_file
             fake_data = creating_fake_data.create_fake_dict(parsed_args.data_schema)
-            with open(file_from_dir, "xt") as f:
+            with open(file_from_dir, "w") as f:
                 json.dump(fake_data, f)
             with open(file_from_dir, "r") as read_it:
                 data = json.load(read_it)
 
-
-#path_f="Users/kpodlaska/Desktop/"
-#file="klucz.txt"
-#print(existing_dir(path_f))
+"""
 
 if __name__ == '__main__':
     main()
