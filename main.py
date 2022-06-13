@@ -4,11 +4,12 @@ import argparse
 import configparser
 import uuid
 import os
-import path
+import creating_fake_data
 #TODO: change d_schema from argparse
-d_schema = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": \"['client', 'partner', 'government']\",\"animal_type\": \"['cat', 'dog', 'monkey','tiger']\",\"age\": \"int:rand(1, 90)\",\"kids_number\": \"int:rand(1, 6)\"}"
+#d_schema = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": \"['client', 'partner', 'government']\",\"animal_type\": \"['cat', 'dog', 'monkey','tiger']\",\"age\": \"int:rand(1, 90)\",\"kids_number\": \"int:rand(1, 6)\"}"
 
-path.create_fake_dict(d_schema)
+#print(creating_fake_data.create_fake_dict(d_schema))
+
 
 def init_arg_parser():
     parser = argparse.ArgumentParser(prog='magicgenerator')
@@ -161,14 +162,16 @@ def main():
     #
     # if args.file_name and args.file_prefix == "--uuid":
     #     print("Creating multiple files with uuid method prefix")
-    if int(parsed_args.files_count) > 0 and parsed_args.file_name and parsed_args.file_prefix\
-            and parsed_args.path_to_save_files and parsed_args.data_lines and parsed_args.data_schema:
+    if parsed_args.files_count and parsed_args.file_name and parsed_args.file_prefix and parsed_args.path_to_save_files and parsed_args.data_lines and parsed_args.data_schema:
         new_files=construct_files(parsed_args.file_name, parsed_args.file_prefix, parsed_args.files_count)
         for new_file in new_files:
             new_path=existing_dir(parsed_args.path_to_save_files)
-            file_from_dir = new_path + new_file
-            fake_data = create_fake_dict(parsed_args.data_schema)
-            with open(file_from_dir, "w") as f:
+            if new_path.endswith("/"):
+                file_from_dir = new_path + new_file
+            else:
+                file_from_dir=new_path + "/" + new_file
+            fake_data = creating_fake_data.create_fake_dict(parsed_args.data_schema)
+            with open(file_from_dir, "xt") as f:
                 json.dump(fake_data, f)
             with open(file_from_dir, "r") as read_it:
                 data = json.load(read_it)

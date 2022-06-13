@@ -1,4 +1,4 @@
-import path
+import creating_fake_data
 import unittest
 data_schema = '{“date”:”timestamp:”, “name”: “str:rand”, “type”:”[‘client’, ‘partner’, ‘government’]”, ' \
               '“age”: “int:rand(1, 90)”} '

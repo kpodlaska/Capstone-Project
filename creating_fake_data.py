@@ -26,8 +26,8 @@ def create_list_of_fake_data(data_types):
                 chars = re.findall(r"[\w']+", possibility)
                 digits_for_randint = []
                 for char in chars:
-                    if char.isdigit():
-                        digits_for_randint.append(char)
+                   if char.isdigit():
+                       digits_for_randint.append(char)
                 min_v = int(min(digits_for_randint))
                 max_v = int(max(digits_for_randint))
                 value = random.randint(min_v, max_v)
@@ -64,9 +64,9 @@ d_schema = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": \"['clien
            "\"int:rand(1, 6)\"} "
 
 
-# separators = []
-# fake_dict = create_fake_dict(d_schema)
-# print(fake_dict)
+
+#fake_dict = create_fake_dict(d_schema)
+
 
 """next step is to put everything into main and create function which generate huge amount on data based on schema,
 It will consume a lot of CPU so please give me some feedback about code above.
