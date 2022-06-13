@@ -8,9 +8,7 @@ import creating_fake_data
 import json
 from faker import Faker
 
-#d_schema = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": \"['client', 'partner', 'government']\",\"animal_type\": \"['cat', 'dog', 'monkey','tiger']\",\"age\": \"int:rand(1, 90)\",\"kids_number\": \"int:rand(1, 6)\"}"
 
-#print(creating_fake_data.create_fake_dict(d_schema))
 
 
 def init_arg_parser():
@@ -166,7 +164,11 @@ def main():
     #     print("Creating multiple files with uuid method prefix")
     if parsed_args.files_count and parsed_args.file_name and parsed_args.file_prefix and parsed_args.path_to_save_files and parsed_args.data_lines and parsed_args.data_schema:
         new_files=construct_files(parsed_args.file_name, parsed_args.file_prefix, parsed_args.files_count)
+        lines = parsed_args.data_lines
         for new_file in new_files:
+
+
+            """
             new_path=existing_dir(parsed_args.path_to_save_files)
             if new_path.endswith("/"):
                 file_from_dir = new_path + new_file
@@ -178,7 +180,7 @@ def main():
             with open(file_from_dir, "r") as read_it:
                 data = json.load(read_it)
 
-
+"""
 
 if __name__ == '__main__':
     main()
