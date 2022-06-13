@@ -175,17 +175,7 @@ def main():
                 for i in range(lines):
                     data = creating_fake_data.create_fake_dict(parsed_args.data_schema)
                     json.dump(data, f)
-            """
-            new_path=existing_dir(parsed_args.path_to_save_files)
-            if new_path.endswith("/"):
-                file_from_dir = new_path + new_file
-            else:
-                file_from_dir=new_path + "/" + new_file
-            fake_data = creating_fake_data.create_fake_dict(parsed_args.data_schema)
-            with open(file_from_dir, "w") as f:
-                json.dump(fake_data, f)
-            with open(file_from_dir, "r") as read_it:
-                data = json.load(read_it)
+
 
 """
 
