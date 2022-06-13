@@ -7,6 +7,7 @@ import os
 import creating_fake_data
 import json
 from faker import Faker
+import creating_fake_data
 
 
 
@@ -69,6 +70,7 @@ def init_logger():
     :return:
     """
     logging.basicConfig(level=logging.DEBUG, format='%(asctime)s | %(levelname)s | %(pathname)s | %(message)s')
+    logging.getLogger('faker').setLevel(logging.ERROR)
     return None
 
 def construct_files(file_name, prefix, how_many_files):
@@ -166,7 +168,10 @@ def main():
         new_files=construct_files(parsed_args.file_name, parsed_args.file_prefix, parsed_args.files_count)
         lines = parsed_args.data_lines
         for new_file in new_files:
-
+            path_to_file = existing_dir(parsed_args.path_to_save_files)
+            data = creating_fake_data.create_fake_dict(parsed_args.data_schema)
+            new_file_with_dir = os.path.join(path_to_file, new_file)
+            print(path_to_file, data, new_file_with_dir)
 
             """
             new_path=existing_dir(parsed_args.path_to_save_files)
