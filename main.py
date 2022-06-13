@@ -166,13 +166,15 @@ def main():
     #     print("Creating multiple files with uuid method prefix")
     if parsed_args.files_count and parsed_args.file_name and parsed_args.file_prefix and parsed_args.path_to_save_files and parsed_args.data_lines and parsed_args.data_schema:
         new_files=construct_files(parsed_args.file_name, parsed_args.file_prefix, parsed_args.files_count)
-        lines = parsed_args.data_lines
+        lines = int(parsed_args.data_lines)
         for new_file in new_files:
             path_to_file = existing_dir(parsed_args.path_to_save_files)
-            data = creating_fake_data.create_fake_dict(parsed_args.data_schema)
+           # data = creating_fake_data.create_fake_dict(parsed_args.data_schema)
             new_file_with_dir = os.path.join(path_to_file, new_file)
-            print(path_to_file, data, new_file_with_dir)
-
+            with open(new_file_with_dir, "w") as f:
+                for i in range(lines):
+                    data = creating_fake_data.create_fake_dict(parsed_args.data_schema)
+                    json.dump(data, f)
             """
             new_path=existing_dir(parsed_args.path_to_save_files)
             if new_path.endswith("/"):
