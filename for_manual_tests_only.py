@@ -1,15 +1,11 @@
-from os import listdir, walk
-from os.path import isfile, join
+import logging
 
-mypath="/Users/kpodlaska/PycharmProjects/pythonProject/Capstone"
-onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
-print(onlyfiles)
-
-
-def existing_dir(prospective_dir):
-    isdir = os.path.isdir(prospective_dir)
-    try:
-        isdir is True
-        return prospective_dir
-    except TypeError:
-        logging.critical("DIR is not exist!")
+import creating_fake_data
+def create_data_without_output_file(lines):
+    if lines > 0:
+        for i in range(lines):
+            data = creating_fake_data.create_fake_dict(parsed_args.data_schema)
+            print(f"{data}")
+    else:
+        logging.critical("You can't process with this number of lines")
+create_data_without_output_file(7)

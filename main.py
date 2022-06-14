@@ -108,7 +108,13 @@ def creating_name_from_numbers_and_lowercase():
     long_lenght_part = "".join(random.sample(all, lenght_3))
     name =mid_lenght_part+symbol+(short_lenght_part+symbol)*3+long_lenght_part
     return name
-
+def create_data_without_output_file(lines, d_schema):
+    if lines > 0:
+        for i in range(lines):
+            data = creating_fake_data.create_fake_dict(d_schema)
+            print(f"{data}")
+    else:
+        logging.critical("You can't proccess with {} number of lines".format(lines))
 
 def main():
     """
@@ -122,7 +128,7 @@ def main():
     parsed_args = init_arg_parser()
     logging.info(parsed_args)
     if existing_dir(parsed_args.path_to_save_files):
-        logging.info("Correct path to folder")
+        pass
     else:
         logging.info("Directory doesn't exist!")
 
@@ -138,32 +144,31 @@ def main():
         path = existing_dir(parsed_args.path_to_save_files)
         logging.debug(f"Path : {path}")
 
-    # # # cos tu nie dziala
-    #
+    if parsed_args.path_to_save_files is None and parsed_args.files_count is not None:
+        logging.info("You didn't choose the path dir, so path is current file ")
 
-    if parsed_args.files_count:
-        if int(parsed_args.files_count) < 0:
-            logging.error("Incorrect value!!! There is no possibility to genereate {}. Put positive number or zero to "
-                          "generate answer without output files".format(parsed_args.files_count))
-        elif int(parsed_args.files_count) == 0:
-            logging.debug("Generate result:")
-             # What you want to do here? -Print result without creating JSON file
-            for i in range(lines):
-                data = creating_fake_data.create_fake_dict(parsed_args.data_schema)
-                logging.info("You choose 0 file so this is your result:".format(data))
-        elif int(parsed_args.files_count) > 0:
-            logging.info("Generate {} files. Here is the result".format(parsed_args.files_count))
-            counter = parsed_args.files_count
+    if int(parsed_args.files_count) > 0 and (parsed_args.file_name, parsed_args.file_prefix, parsed_args.path_to_save_files, parsed_args.data_lines, parsed_args.data_schema) is not None:
+        new_files=construct_files(parsed_args.file_name, parsed_args.file_prefix, parsed_args.files_count)
+        lines = int(parsed_args.data_lines)
+        for new_file in new_files:
+            path_to_file = existing_dir(parsed_args.path_to_save_files)
+            new_file_with_dir = os.path.join(path_to_file, new_file)
+            with open(new_file_with_dir, "w") as f:
+                for i in range(lines):
+                    data = creating_fake_data.create_fake_dict(parsed_args.data_schema)
+                    json.dump(data, f)
+    if int(parsed_args.files_count) == 0 and (parsed_args.data_lines, parsed_args.data_schema) is not None:
+        logging.info("You choose to generate 0 files, so result is printed without output file, nor file_name, file_prefix or path_to_save_files won't needed")
+        lines = int(parsed_args.data_lines)
+        create_data_without_output_file(lines,parsed_args.data_schema)
+            #TODO: I used print in create_data_without_output_file, can stay that way?
+    if int(parsed_args.files_count) < 0:
+        logging.error("Incorrect value!!! There is no possibility to genereate {}. Put positive number or zero to "
+                      "generate answer without output files".format(parsed_args.files_count))
 
-    if parsed_args.file_name and parsed_args.file_prefix == "count":
-        logging.info("Creating multiple files with count method prefix")
-        print("wypełniłeś file_name oraz file_prefix==count")
+    if parsed_args.file_name is not None and parsed_args.file_prefix is not None and int(parsed_args.files_count) > 0 and int(parsed_args.data_lines) > 0 and parsed_args.data_schema is not None:
+        logging.info(f"You choose to generate {parsed_args.files_count} file with {parsed_args.data_lines} lines named: {parsed_args.file_name} with prefix {parsed_args.file_prefix} method")
 
-    # if args.file_name and args.file_prefix == "--random":
-    #     print("Creating multiple files with random method prefix")
-    #
-    # if args.file_name and args.file_prefix == "--uuid":
-    #     print("Creating multiple files with uuid method prefix")
     if parsed_args.files_count and parsed_args.file_name and parsed_args.file_prefix and parsed_args.path_to_save_files and parsed_args.data_lines and parsed_args.data_schema:
         new_files=construct_files(parsed_args.file_name, parsed_args.file_prefix, parsed_args.files_count)
         lines = int(parsed_args.data_lines)
