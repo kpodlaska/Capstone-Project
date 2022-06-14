@@ -8,6 +8,7 @@ import creating_fake_data
 import json
 from faker import Faker
 import creating_fake_data
+import random
 
 
 
@@ -107,14 +108,8 @@ def creating_name_from_numbers_and_lowercase():
     long_lenght_part = "".join(random.sample(all, lenght_3))
     name =mid_lenght_part+symbol+(short_lenght_part+symbol)*3+long_lenght_part
     return name
-#TODO: define existing_dir, cause I cancel previous one
-"""
-def create_files_into_dir(path, file_name):
 
-    f_path=path+
-    with open(file_name,"w") as f:
 
-"""
 def main():
     """
     Having main helps organize code,
@@ -145,19 +140,24 @@ def main():
 
     # # # cos tu nie dziala
     #
-    counter = 0
+
     if parsed_args.files_count:
-        if parsed_args.files_count < 0:
+        if int(parsed_args.files_count) < 0:
             logging.error("Incorrect value!!! There is no possibility to genereate {}. Put positive number or zero to "
                           "generate answer without output files".format(parsed_args.files_count))
-        elif parsed_args.files_count == 0:
-            logging.debug("Generate result:")  # What you want to do here? -Print result without creating JSON file
-        elif parsed_args.files_count > 0:
+        elif int(parsed_args.files_count) == 0:
+            logging.debug("Generate result:")
+             # What you want to do here? -Print result without creating JSON file
+            for i in range(lines):
+                data = creating_fake_data.create_fake_dict(parsed_args.data_schema)
+                logging.info("You choose 0 file so this is your result:".format(data))
+        elif int(parsed_args.files_count) > 0:
             logging.info("Generate {} files. Here is the result".format(parsed_args.files_count))
             counter = parsed_args.files_count
 
-    if parsed_args.file_name and parsed_args.file_prefix == "-count":
+    if parsed_args.file_name and parsed_args.file_prefix == "count":
         logging.info("Creating multiple files with count method prefix")
+        print("wypełniłeś file_name oraz file_prefix==count")
 
     # if args.file_name and args.file_prefix == "--random":
     #     print("Creating multiple files with random method prefix")
@@ -177,7 +177,7 @@ def main():
                     json.dump(data, f)
 
 
-"""
+
 
 if __name__ == '__main__':
     main()

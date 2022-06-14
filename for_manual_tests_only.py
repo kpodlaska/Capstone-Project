@@ -6,5 +6,10 @@ onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
 print(onlyfiles)
 
 
-filenames = next(walk(mypath), (None, None, []))[2]
-print(filenames)
+def existing_dir(prospective_dir):
+    isdir = os.path.isdir(prospective_dir)
+    try:
+        isdir is True
+        return prospective_dir
+    except TypeError:
+        logging.critical("DIR is not exist!")
