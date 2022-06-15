@@ -115,6 +115,16 @@ def create_data_without_output_file(lines, d_schema):
             print(f"{data}")
     else:
         logging.critical("You can't proccess with {} number of lines".format(lines))
+def create_output_file(f_line, d_schema, path, f_name, f_prefix, f_number):
+    new_files = construct_files(f_name, f_prefix, f_number)
+    lines = int(f_line)
+    for new_file in new_files:
+        path_to_file = existing_dir(path)
+        new_file_with_dir = os.path.join(path_to_file, new_file)
+        with open(new_file_with_dir, "w") as f:
+            for i in range(lines):
+                data = creating_fake_data.create_fake_dict(d_schema)
+                json.dump(data, f)
 
 def main():
     """
