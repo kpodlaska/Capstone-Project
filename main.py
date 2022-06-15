@@ -158,15 +158,9 @@ def main():
         logging.info("You didn't choose the path dir, so path is current file ")
 
     if int(parsed_args.files_count) > 0 and (parsed_args.file_name, parsed_args.file_prefix, parsed_args.path_to_save_files, parsed_args.data_lines, parsed_args.data_schema) is not None:
-        new_files=construct_files(parsed_args.file_name, parsed_args.file_prefix, parsed_args.files_count)
-        lines = int(parsed_args.data_lines)
-        for new_file in new_files:
-            path_to_file = existing_dir(parsed_args.path_to_save_files)
-            new_file_with_dir = os.path.join(path_to_file, new_file)
-            with open(new_file_with_dir, "w") as f:
-                for i in range(lines):
-                    data = creating_fake_data.create_fake_dict(parsed_args.data_schema)
-                    json.dump(data, f)
+        create_output_file(parsed_args.data_lines, parsed_args.data_schema, parsed_args.path_to_save_files,
+                           parsed_args.file_name, parsed_args.file_prefix, parsed_args.files_count)
+
     if int(parsed_args.files_count) == 0 and (parsed_args.data_lines, parsed_args.data_schema) is not None:
         logging.info("You choose to generate 0 files, so result is printed without output file, nor file_name, file_prefix or path_to_save_files won't needed")
         lines = int(parsed_args.data_lines)
@@ -178,20 +172,6 @@ def main():
 
     if parsed_args.file_name is not None and parsed_args.file_prefix is not None and int(parsed_args.files_count) > 0 and int(parsed_args.data_lines) > 0 and parsed_args.data_schema is not None:
         logging.info(f"You choose to generate {parsed_args.files_count} file with {parsed_args.data_lines} lines named: {parsed_args.file_name} with prefix {parsed_args.file_prefix} method")
-
-    if parsed_args.files_count and parsed_args.file_name and parsed_args.file_prefix and parsed_args.path_to_save_files and parsed_args.data_lines and parsed_args.data_schema:
-        new_files=construct_files(parsed_args.file_name, parsed_args.file_prefix, parsed_args.files_count)
-        lines = int(parsed_args.data_lines)
-        for new_file in new_files:
-            path_to_file = existing_dir(parsed_args.path_to_save_files)
-           # data = creating_fake_data.create_fake_dict(parsed_args.data_schema)
-            new_file_with_dir = os.path.join(path_to_file, new_file)
-            with open(new_file_with_dir, "w") as f:
-                for i in range(lines):
-                    data = creating_fake_data.create_fake_dict(parsed_args.data_schema)
-                    json.dump(data, f)
-
-
 
 
 if __name__ == '__main__':
