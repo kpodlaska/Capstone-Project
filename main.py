@@ -10,7 +10,7 @@ from faker import Faker
 import creating_fake_data
 import random
 from concurrent.futures import  ThreadPoolExecutor
-
+from string import ascii_lowercase
 
 
 
@@ -100,7 +100,7 @@ def construct_files(file_name, prefix, how_many_files):
 def creating_name_from_numbers_and_lowercase():
     numbers='0123456789'
     symbol='-'
-    all =  ascii_lowercase + numbers
+    all = ascii_lowercase + numbers
     lenght_1 = 8
     lenght_2 = 4
     lenght_3 = 12
@@ -131,9 +131,8 @@ def create_output_files(f_line, d_schema, path, f_name, f_prefix, f_number):
 
 def create_output_file(f_line, d_schema, path, f_name):
     path_to_file = existing_dir(path)
-    new_file_with_dir = os.path.join(path_to_file, new_file)
+    new_file_with_dir = os.path.join(path_to_file, f_name)
     with open(new_file_with_dir, "w") as f:
-        for i in range(lines):
             data = creating_fake_data.create_fake_dict(d_schema)
             json.dump(data, f)
             return new_file_with_dir
