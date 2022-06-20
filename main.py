@@ -9,6 +9,7 @@ import json
 from faker import Faker
 import creating_fake_data
 import random
+from concurrent.futures import  ThreadPoolExecutor
 
 
 
@@ -115,7 +116,8 @@ def create_data_without_output_file(lines, d_schema):
             print(f"{data}")
     else:
         logging.critical("You can't proccess with {} number of lines".format(lines))
-def create_output_file(f_line, d_schema, path, f_name, f_prefix, f_number):
+
+def create_output_files(f_line, d_schema, path, f_name, f_prefix, f_number):
     new_files = construct_files(f_name, f_prefix, f_number)
     lines = int(f_line)
     for new_file in new_files:
@@ -125,7 +127,16 @@ def create_output_file(f_line, d_schema, path, f_name, f_prefix, f_number):
             for i in range(lines):
                 data = creating_fake_data.create_fake_dict(d_schema)
                 json.dump(data, f)
+            return new_file_with_dir
 
+def create_output_file(f_line, d_schema, path, f_name):
+    path_to_file = existing_dir(path)
+    new_file_with_dir = os.path.join(path_to_file, new_file)
+    with open(new_file_with_dir, "w") as f:
+        for i in range(lines):
+            data = creating_fake_data.create_fake_dict(d_schema)
+            json.dump(data, f)
+            return new_file_with_dir
 def main():
     """
     Having main helps organize code,
@@ -158,8 +169,11 @@ def main():
         logging.info("You didn't choose the path dir, so path is current file ")
 
     if int(parsed_args.files_count) > 0 and (parsed_args.file_name, parsed_args.file_prefix, parsed_args.path_to_save_files, parsed_args.data_lines, parsed_args.data_schema) is not None:
-        create_output_file(parsed_args.data_lines, parsed_args.data_schema, parsed_args.path_to_save_files,
-                           parsed_args.file_name, parsed_args.file_prefix, parsed_args.files_count)
+        files = construct_files(parsed_args.file_name, parsed_args.file_prefix, parsed_args.files_count)
+        with ThreadPoolExecutor() as executor:
+            futures = [executor.submit(create_output_file, parsed_args.data_lines, parsed_args.data_schema, parsed_args.path_to_save_files, file) for file in files]
+       # create_output_file(parsed_args.data_lines, parsed_args.data_schema, parsed_args.path_to_save_files,
+        #                   parsed_args.file_name, parsed_args.file_prefix, parsed_args.files_count)
 
     if int(parsed_args.files_count) == 0 and (parsed_args.data_lines, parsed_args.data_schema) is not None:
         logging.info("You choose to generate 0 files, so result is printed without output file, nor file_name, file_prefix or path_to_save_files won't needed")
@@ -175,4 +189,5 @@ def main():
 
 
 if __name__ == '__main__':
+
     main()
