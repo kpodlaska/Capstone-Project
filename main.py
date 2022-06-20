@@ -30,7 +30,7 @@ def init_arg_parser():
     parser.add_argument('--clear_path',
                         help='If this flag is on, before the script starts creating new data files, all files in '
                              'path_to_save_files that match file_name will be deleted.')
-    parser.add_argument('--multiprocessing', help='The number of processes used to create files')
+    parser.add_argument('--multiprocessing', help='The number of processes used to create files', default=5)
 
     args = parser.parse_args()
 
@@ -168,8 +168,10 @@ def main():
         logging.info("You didn't choose the path dir, so path is current file ")
 
     if int(parsed_args.files_count) > 0 and (parsed_args.file_name, parsed_args.file_prefix, parsed_args.path_to_save_files, parsed_args.data_lines, parsed_args.data_schema) is not None:
+        logging.debug(f'The number of processes used to create files is {parsed_args.multiprocessing}')
         files = construct_files(parsed_args.file_name, parsed_args.file_prefix, parsed_args.files_count)
-        with ThreadPoolExecutor() as executor:
+
+        with ThreadPoolExecutor(max_workers=parsed_args.multiprocessing) as executor:
             futures = [executor.submit(create_output_file, parsed_args.data_lines, parsed_args.data_schema, parsed_args.path_to_save_files, file) for file in files]
        # create_output_file(parsed_args.data_lines, parsed_args.data_schema, parsed_args.path_to_save_files,
         #                   parsed_args.file_name, parsed_args.file_prefix, parsed_args.files_count)
