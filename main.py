@@ -1,17 +1,15 @@
 """Hope for the best but plan for the worst"""
-import logging
+
 import argparse
-import configparser
-import uuid
-import os
-import creating_fake_data
 import json
-from faker import Faker
-import creating_fake_data
+import logging
+import os
+import uuid
 import random
-from concurrent.futures import  ThreadPoolExecutor
 from string import ascii_lowercase
 
+import creating_fake_data
+from concurrent.futures import  ThreadPoolExecutor
 
 
 def init_arg_parser():
@@ -45,24 +43,6 @@ def existing_dir(prospective_dir):
         logging.critical("DIR is not exist!")
 
 print(existing_dir(os.getcwd()))
-"""
-config = configparser.ConfigParser()
-config['DEFAULT'] = {'ServerAliveInterval': '45',
-                     'Compression': 'yes',
-                      'CompressionLevel': '9'}
-config['bitbucket.org'] = {}
-config['bitbucket.org']['User'] = 'hg'
-config['topsecret.server.com'] = {}
-
-topsecret = config['topsecret.server.com']
-topsecret['Port'] = '50022'     # mutates the parser
-topsecret['ForwardX11'] = 'no'  # same here
-config['DEFAULT']['ForwardX11'] = 'yes'
-with open('example.ini', 'w') as configfile:
-    config.write(configfile)
-
-print('If you read this line it means that you have provided '
-      'all the parameters')"""
 
 
 def init_logger():

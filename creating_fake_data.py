@@ -65,7 +65,6 @@ d_schema = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": \"['clien
 
 
 
-#fake_dict = create_fake_dict(d_schema)
 
 
 """next step is to put everything into main and create function which generate huge amount on data based on schema,
