@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import glob
 import logging
 import os
 import uuid
@@ -29,7 +30,7 @@ def init_arg_parser():
                         help='If this flag is on, before the script starts creating new data files, all files in '
                              'path_to_save_files that match file_name will be deleted.')
     parser.add_argument('--multiprocessing', help='The number of processes used to create files', default=5)
-
+    parser.add_argument('--clear_path', help='Clear all files in path_to_save_files that match file_name', action="store_true")
     args = parser.parse_args()
 
     return args
@@ -116,6 +117,14 @@ def create_output_file(f_line, d_schema, path, f_name):
             data = creating_fake_data.create_fake_dict(d_schema)
             json.dump(data, f)
             return new_file_with_dir
+
+def clear_files_in_path(path,file_name):
+    pattern = path +"*"+file_name+"*"
+    files = glob.glob(pattern)
+    for file in files:
+        logging.debug("Deleting:" {file})
+        os.remove(file)
+
 def main():
     """
     Having main helps organize code,
