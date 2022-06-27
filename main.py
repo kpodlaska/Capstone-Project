@@ -36,15 +36,15 @@ def init_arg_parser():
     return args
 
 def existing_dir(prospective_dir):
-    isdir = os.path.isdir(prospective_dir)
-    try:
-        isdir is True
+    """Chech if path existing (files or directory"""
+    if os.path.isfile(prospective_dir):
+        logging.info(f"file {prospective_dir}) exists")
         return prospective_dir
-    except TypeError:
-        logging.critical("DIR is not exist!")
-
-print(existing_dir(os.getcwd()))
-
+    elif os.path.isdir(prospective_dir):
+        logging.info(f"directory {prospective_dir}) exists")
+        return prospective_dir
+    else:
+        logging.critical(f"Wrong path. Can't continue")
 
 def init_logger():
     """
@@ -90,6 +90,8 @@ def creating_name_from_numbers_and_lowercase():
     long_lenght_part = "".join(random.sample(all, lenght_3))
     name =mid_lenght_part+symbol+(short_lenght_part+symbol)*3+long_lenght_part
     return name
+
+
 def create_data_without_output_file(lines, d_schema):
     if lines > 0:
         for i in range(lines):
@@ -113,17 +115,26 @@ def create_output_files(f_line, d_schema, path, f_name, f_prefix, f_number):
 def create_output_file(f_line, d_schema, path, f_name):
     path_to_file = existing_dir(path)
     new_file_with_dir = os.path.join(path_to_file, f_name)
+    lines=int(f_line)
     with open(new_file_with_dir, "w") as f:
-            data = creating_fake_data.create_fake_dict(d_schema)
-            json.dump(data, f)
-            return new_file_with_dir
+        list_ = []
+        for i in range(lines):
+            data = str(creating_fake_data.create_fake_dict(d_schema))
+            list_.append(data)
+        json.dump(list_, f)
+        return new_file_with_dir
 
-def clear_files_in_path(path,file_name):
-    pattern = path +"*"+file_name+"*"
-    files = glob.glob(pattern)
+def clear_files_in_path(path, file_name):
+    main.existing_dir(path)
+    files = os.listdir(path)
+    result=[]
     for file in files:
-        logging.debug("Deleting:" {file})
-        os.remove(file)
+        if file.endswith("json"):
+            if file_name in file:
+                result.append(file)
+                new_dir = os.path.join(path, file)
+                logging.info(f"Delete file {file}")
+                os.remove(new_dir)
 
 def main():
     """

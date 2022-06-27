@@ -1,5 +1,8 @@
+import json
+
 import creating_fake_data
 import unittest
+import main
 data_schema = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": \"['client', 'partner', 'government']\"," \
            "\"animal_type\": \"['cat', 'dog', 'monkey','tiger']\",\"age\": \"int:rand(1, 90)\",\"kids_number\": " \
            "\"int:rand(1, 6)\"} "
@@ -14,10 +17,19 @@ class TestDictionary(unittest.TestCase):
         dict_given = creating_fake_data.create_fake_dict(data_schema)
         dict_values = dict_given.values()
         dict_keys = dict_given.keys()
-        self.assertEqual(len(dict_values),len(dict_keys))
+        self.assertEqual(len(dict_values), len(dict_keys))
 
     def test_add_lines_to_file(self):
-        pass
+        file_name = "magic_file_generator.json"
+        d_schema = "{\"date\": \"timestamp:\"} "
+        path = "/Users/kpodlaska/Desktop"
+        f_line_given = 10
+        file_given = main.create_output_file(f_line_given, d_schema, path, file_name)
+        print(file_given)
+        f = open(file_given)
+        data = json.load(f)
+        f.close()
+        self.assertEqual(f_line_given, len(data))
 
     def test_creating_number_of_files(self):
         pass
