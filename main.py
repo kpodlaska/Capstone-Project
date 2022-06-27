@@ -135,6 +135,7 @@ def clear_files_in_path(path, file_name):
                 new_dir = os.path.join(path, file)
                 logging.info(f"Delete file {file}")
                 os.remove(new_dir)
+#TODO: add argparse for this function
 
 def main():
     """
