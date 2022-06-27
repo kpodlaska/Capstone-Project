@@ -8,6 +8,7 @@ import json
 from faker import Faker
 import re
 
+
 def create_fake_timestamp():
     fake = Faker()
     some_data = fake.date_time_between(start_date='-15y', end_date='now')
@@ -16,7 +17,7 @@ def create_fake_timestamp():
     value = some_data
     return value
 
-  
+
 def create_list_of_fake_data(data_types):
     result = []
     possibilities = list(data_types)
@@ -26,8 +27,8 @@ def create_list_of_fake_data(data_types):
                 chars = re.findall(r"[\w']+", possibility)
                 digits_for_randint = []
                 for char in chars:
-                   if char.isdigit():
-                       digits_for_randint.append(char)
+                    if char.isdigit():
+                        digits_for_randint.append(char)
                 min_v = int(min(digits_for_randint))
                 max_v = int(max(digits_for_randint))
                 value = random.randint(min_v, max_v)
@@ -35,6 +36,12 @@ def create_list_of_fake_data(data_types):
             elif len(possibility) == 3:
                 value = random.randint(0, 100)
                 result.append(value)
+            elif ":" in possibility and "rand" not in possibility:
+                possibility.replace("int:", "")
+            if possibility.isdigit:
+                result.append(value)
+            else:
+                logging.error(f"{possibility} is not Integer type")
         elif "timestamp" in possibility:
             value = create_fake_timestamp()
             result.append(value)
@@ -46,6 +53,13 @@ def create_list_of_fake_data(data_types):
             fake = Faker()
             value = fake.pystr()
             result.append(value)
+        elif "str:" in possibility and "rand" not in possibility:
+            possibility.replace("str:", "")
+            if type(possibility) == "str":
+                result.append(value)
+        else:
+            logging.error(f"{possibility} is not String type")
+
     return result
 
 
@@ -62,9 +76,6 @@ f_name = "test.json"
 d_schema = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": \"['client', 'partner', 'government']\"," \
            "\"animal_type\": \"['cat', 'dog', 'monkey','tiger']\",\"age\": \"int:rand(1, 90)\",\"kids_number\": " \
            "\"int:rand(1, 6)\"} "
-
-
-
 
 
 """next step is to put everything into main and create function which generate huge amount on data based on schema,
