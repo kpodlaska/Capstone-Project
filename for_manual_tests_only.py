@@ -6,51 +6,10 @@ import unittest
 import main
 import glob
 import random
+import re
 
 
-def create_list_of_fake_data(data_types):
-    result = []
-    possibilities = list(data_types)
-    for possibility in possibilities:
-        if "int" in possibility:
-            if "rand" in possibility and len(possibility) > 3:
-                chars = re.findall(r"[\w']+", possibility)
-                digits_for_randint = []
-                for char in chars:
-                   if char.isdigit():
-                       digits_for_randint.append(char)
-                min_v = int(min(digits_for_randint))
-                max_v = int(max(digits_for_randint))
-                value = random.randint(min_v, max_v)
-                result.append(value)
-            elif len(possibility) == 3:
-                value = random.randint(0, 100)
-                result.append(value)
-            elif ":" in possibility and rand" not in possibility:
-                possibility.replace("int:", "")
-                if possibility.isdigit:
-                    result.append(value)
-                else:
-                    logging.error(f"{possibility} is not Integer type")
-        elif "timestamp" in possibility:
-            value = create_fake_timestamp()
-            result.append(value)
-        elif "[" in possibility:
-            x = possibility.replace("[", "").replace("]", "").replace(",", "").replace("'", '').split()
-            value = random.choice(x)
-            result.append(value)
-        elif "str" in possibility and "rand" in possibility:
-            fake = Faker()
-            value = fake.pystr()
-            result.append(value)
-        elif "str:" in possibility and "rand" not in possibility:
-            possibility.replace("str:","")
-            if type(possibility) == "str":
-                result.append(value)
-            else:
-                logging.error(f"{possibility} is not String type")
 
-    return result
 
 """
 def test.add_lines_to_file():
@@ -70,7 +29,10 @@ def test.add_lines_to_file():
 
 if __name__ == '__main__':
 
-    create_list_of_fake_data("['cat', 'dog', 'monkey','tiger']")
+
+    b = main.existing_dir("../Capstone")
+    print(b)
+"""    
 def create_list_of_fake_data(data_types):
     result = []
     possibilities = list(data_types)
@@ -100,4 +62,4 @@ def create_list_of_fake_data(data_types):
             fake = Faker()
             value = fake.pystr()
             result.append(value)
-    return result
+    return result"""

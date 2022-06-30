@@ -1,12 +1,6 @@
 import json
-
-import creating_fake_data
 import unittest
 import main
-data_schema = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": \"['client', 'partner', 'government']\"," \
-           "\"animal_type\": \"['cat', 'dog', 'monkey','tiger']\",\"age\": \"int:rand(1, 90)\",\"kids_number\": " \
-           "\"int:rand(1, 6)\"} "
-
 
 
 class TestDictionary(unittest.TestCase):
@@ -14,7 +8,7 @@ class TestDictionary(unittest.TestCase):
         data_schema = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": \"['client', 'partner', 'government']\"," \
                       "\"animal_type\": \"['cat', 'dog', 'monkey','tiger']\",\"age\": \"int:rand(1, 90)\",\"kids_number\": " \
                       "\"int:rand(1, 6)\"} "
-        dict_given = creating_fake_data.create_fake_dict(data_schema)
+        dict_given = main.create_fake_dict(data_schema)
         dict_values = dict_given.values()
         dict_keys = dict_given.keys()
         self.assertEqual(len(dict_values), len(dict_keys))
