@@ -4,7 +4,7 @@ import argparse
 import os
 import uuid
 
-from concurrent.futures import  ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor
 
 import logging
 import random
@@ -13,15 +13,18 @@ from faker import Faker
 import re
 from string import ascii_lowercase
 
+
 def create_value_list_from_schema(d_schema):
     schema_dict = json.loads(d_schema)
     schema_data_types = list(schema_dict.values())
     return schema_data_types
 
+
 def create_key_list_from_schema(d_schema):
     schema_dict = json.loads(d_schema)
     schema_key_data_types = list(schema_dict.keys())
     return schema_key_data_types
+
 
 def create_fake_timestamp():
     fake = Faker()
@@ -31,18 +34,20 @@ def create_fake_timestamp():
     value = some_data
     return value
 
+
 def creating_name_from_numbers_and_lowercase():
-    numbers='0123456789'
-    symbol='-'
-    all = ascii_lowercase + numbers
+    numbers = '0123456789'
+    symbol = '-'
+    all_ = ascii_lowercase + numbers
     lenght_1 = 8
     lenght_2 = 4
     lenght_3 = 12
-    mid_lenght_part ="".join(random.sample(all, lenght_1))
-    short_lenght_part = "".join(random.sample(all, lenght_2))
-    long_lenght_part = "".join(random.sample(all, lenght_3))
-    name =mid_lenght_part+symbol+(short_lenght_part+symbol)*3+long_lenght_part
+    mid_lenght_part = "".join(random.sample(all_, lenght_1))
+    short_lenght_part = "".join(random.sample(all_, lenght_2))
+    long_lenght_part = "".join(random.sample(all_, lenght_3))
+    name = mid_lenght_part+symbol+(short_lenght_part+symbol)*3+long_lenght_part
     return name
+
 
 def create_list_of_fake_data(schema):
     result = []
@@ -51,18 +56,18 @@ def create_list_of_fake_data(schema):
         """integers as possible result"""
         if "int" in possibility:
             if "int:" in possibility and "rand" not in possibility:
-                naked_possibility = possibility.replace("int:","")
+                naked_possibility = possibility.replace("int:", "")
                 if naked_possibility.isdigit():
                     result.append(naked_possibility)
                 else:
-                    logging.error("You choose int type value for non int deflaut parameter. Can't do do this! Value 6 as integer was used instead")
+                    logging.error("You choose int type value for non int deflaut parameter. Value 6 was used instead")
                     result.append(6)
             elif "rand" in possibility and len(possibility) > 3:
                 chars = re.findall(r"[\w']+", possibility)
                 digits_for_randint = []
                 for char in chars:
-                   if char.isdigit():
-                       digits_for_randint.append(char)
+                    if char.isdigit():
+                        digits_for_randint.append(char)
                 min_v = int(min(digits_for_randint))
                 max_v = int(max(digits_for_randint))
                 value = random.randint(min_v, max_v)
@@ -84,7 +89,7 @@ def create_list_of_fake_data(schema):
                     result.append(naked_possibility)
                 else:
                     logging.error(
-                        "You choose str type value for non str deflaut parameter. Can't do do this! Value MagicIsCool  was used instead")
+                        "You choose str type value for non str deflaut parameter! Value MagicIsCool  was used instead")
                     result.append("MagicIsCool")
             elif "rand" in possibility:
                 value = creating_name_from_numbers_and_lowercase()
@@ -96,7 +101,7 @@ def create_list_of_fake_data(schema):
                     result.append(naked_possibility)
                 else:
                     logging.error(
-                        "You choose str type value for non str deflaut parameter. Can't do do this! Value MagicIsCool  was used instead")
+                        "You choose str type value for non str deflaut parameter! Value MagicIsCool  was used instead")
                     result.append("MagicIsCool")"""
 
     return result
@@ -126,14 +131,15 @@ def init_arg_parser():
                         help='If this flag is on, before the script starts creating new data files, all files in '
                              'path_to_save_files that match file_name will be deleted.')
     parser.add_argument('--multiprocessing', help='The number of processes used to create files', default=5)
-    #parser.add_argument('--clear_path', help='Clear all files in path_to_save_files that match file_name', action='store_true')
+    parser.add_argument('--clear_path', help='Clear all files in path_to_save_files that match file_name', action='store_true')
     args = parser.parse_args()
 
     return args
 
+
 def existing_dir(prospective_dir):
     if prospective_dir == ".":
-        prospective_dir=os. getcwd()
+        prospective_dir = os. getcwd()
         logging.debug(f"You are in current directory. Path : {prospective_dir}")
         return prospective_dir
     elif os.path.isfile(prospective_dir):
@@ -142,6 +148,7 @@ def existing_dir(prospective_dir):
         return prospective_dir
     else:
         logging.critical(f"Wrong path. Can't continue")
+
 
 def init_logger():
     """
@@ -153,15 +160,16 @@ def init_logger():
     logging.getLogger('faker').setLevel(logging.ERROR)
     return None
 
+
 def construct_files(file_name, prefix, how_many_files):
-    ext="json"
+    ext = "json"
     prefixes = []
     if prefix == "count":
         for n in range(how_many_files):
             prefixes.append(str(n+1))
     elif prefix == "random":
         for n in range(how_many_files):
-            number=random.randint(1,1_000_000_000_000)
+            number = random.randint(1, 1_000_000_000_000)
             prefixes.append(number)
     elif prefix == "uuid":
         for n in range(how_many_files):
@@ -183,10 +191,11 @@ def create_data_without_output_file(lines, d_schema):
     else:
         logging.critical("You can't proccess with {} number of lines".format(lines))
 
+
 def create_output_file(f_line, d_schema, path, f_name):
     path_to_file = existing_dir(path)
     new_file_with_dir = os.path.join(path_to_file, f_name)
-    lines=int(f_line)
+    lines = int(f_line)
     with open(new_file_with_dir, "w") as f:
         list_ = []
         for i in range(lines):
@@ -196,11 +205,12 @@ def create_output_file(f_line, d_schema, path, f_name):
         logging.debug(f"File {f_name} created")
         return new_file_with_dir
 
+
 def clear_files_in_path(path, file_name):
     existing_dir(path)
     "check if path exists"
     files = os.listdir(path)
-    result=[]
+    result = []
     for file in files:
         if file.endswith("json"):
             if file_name in file:
@@ -210,6 +220,7 @@ def clear_files_in_path(path, file_name):
                 os.remove(new_dir)
 
 #TODO: add argparse for this function
+
 
 def main():
     """
@@ -246,12 +257,10 @@ def main():
             futures = [executor.submit(create_output_file, parsed_args.data_lines, parsed_args.data_schema, parsed_args.path_to_save_files, file) for file in files]
         logging.info(f"All files created. Created {len(futures)} files")
 
-
     if int(parsed_args.files_count) == 0 and (parsed_args.data_lines, parsed_args.data_schema) is not None:
         logging.info("You choose to generate 0 files, so result is printed without output file, nor file_name, file_prefix or path_to_save_files won't needed")
         lines = int(parsed_args.data_lines)
-        create_data_without_output_file(lines,parsed_args.data_schema)
-            #TODO: I used print in create_data_without_output_file, can stay that way?
+        create_data_without_output_file(lines, parsed_args.data_schema)
     if int(parsed_args.files_count) < 0:
         logging.error("Incorrect value!!! There is no possibility to generate {}. Put positive number or zero to "
                       "generate answer without output files".format(parsed_args.files_count))
