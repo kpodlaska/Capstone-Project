@@ -10,7 +10,7 @@ def create_config_ini():
                       "\"int:rand(1, 6)\"} ",
                          'data_lines': '100',
                          'multiprocessing': '5'}
-    with open('deflault.ini', 'w') as configfile:
+    with open('default.ini', 'w') as configfile:
        config.write(configfile)
 
 if __name__ == '__main__':

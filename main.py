@@ -117,12 +117,12 @@ def create_fake_dict(data_schema):
 def init_arg_parser():
     parser = argparse.ArgumentParser(prog='magicgenerator')
     config = configparser.ConfigParser()
-    config.read("deflault.ini")
+    config.read("default.ini")
     parser.add_argument('--path_to_save_files',
                         help="Define a path to output file. For current path use '.', As deflaut is ./Capstone",
                         type=str,
                         default=config["DEFAULT"]["path_to_save_files"])
-    parser.add_argument('--files_count', help="Define how many json file do you want to generate", type=int, deflault=config["DEFAULT"]["files_count"])
+    parser.add_argument('--files_count', help="Define how many json file do you want to generate", type=int, default=config["DEFAULT"]["files_count"])
     parser.add_argument('--file_name', help="Choose name to your file", type=str, default=config["DEFAULT"]["file_name"])
     parser.add_argument('--file_prefix', help="If you chose more than 1 output file please choose prefix", type=str,
                         choices=['count', 'random', 'uuid'], default=config["DEFAULT"]["file_prefix"])
@@ -243,6 +243,10 @@ def main():
     else:
         path = existing_dir(parsed_args.path_to_save_files)
         logging.debug(f"Path : {path}")
+
+    if parsed_args.clear_path and parsed_args.path_to_save_files and parsed_args.file_name:
+        logging.info("You decide to clear path before work")
+        clear_files_in_path(parsed_args.path_to_save_files, parsed_args.file_name)
 
     if parsed_args.path_to_save_files is None and parsed_args.files_count is not None:
         logging.info("You didn't choose the path dir, so path is current file ")
