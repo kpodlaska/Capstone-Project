@@ -127,11 +127,8 @@ def init_arg_parser():
                         choices=['count', 'random', 'uuid'])
     parser.add_argument('--data_schema', help='Provide data Schema for your output files')
     parser.add_argument('--data_lines', help='How many lines your output file has')
-    parser.add_argument('--clear_path',
-                        help='If this flag is on, before the script starts creating new data files, all files in '
-                             'path_to_save_files that match file_name will be deleted.')
     parser.add_argument('--multiprocessing', help='The number of processes used to create files', default=5)
-    #parser.add_argument('--clear_path', help='Clear all files in path_to_save_files that match file_name', action='store_true')
+    parser.add_argument('--clear_path', help='Clear all files in path_to_save_files that match file_name', action='store_true')
     args = parser.parse_args()
 
     return args

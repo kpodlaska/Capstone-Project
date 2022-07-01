@@ -1,7 +1,7 @@
 import logging
 import json
 import os
-import creating_fake_data
+import creating_config_file
 import unittest
 import main
 import glob
@@ -22,4 +22,4 @@ def clear_files_in_path(path, file_name):
                 os.remove(new_dir)
 
 if __name__ == '__main__':
-    clear_files_in_path("/Users/kpodlaska/Desktop", "super")
+    clear_files_in_path("/Users/kpodlaska/Desktop", "grzybek")
