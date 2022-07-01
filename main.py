@@ -1,5 +1,5 @@
 """Hope for the best but plan for the worst"""
-
+import configparser
 import argparse
 import os
 import uuid
@@ -116,22 +116,20 @@ def create_fake_dict(data_schema):
 
 def init_arg_parser():
     parser = argparse.ArgumentParser(prog='magicgenerator')
-
+    config = configparser.ConfigParser()
+    config.read("default.ini")
     parser.add_argument('--path_to_save_files',
                         help="Define a path to output file. For current path use '.', As deflaut is ./Capstone",
                         type=str,
-                        default="/Users/kpodlaska/PycharmProjects/pythonProject/Capstone")
-    parser.add_argument('--files_count', help="Define how many json file do you want to generate", type=int)
-    parser.add_argument('--file_name', help="Choose name to your file", type=str)
+                        default=config["DEFAULT"]["path_to_save_files"])
+    parser.add_argument('--files_count', help="Define how many json file do you want to generate", type=int, default=config["DEFAULT"]["files_count"])
+    parser.add_argument('--file_name', help="Choose name to your file", type=str, default=config["DEFAULT"]["file_name"])
     parser.add_argument('--file_prefix', help="If you chose more than 1 output file please choose prefix", type=str,
-                        choices=['count', 'random', 'uuid'])
-    parser.add_argument('--data_schema', help='Provide data Schema for your output files')
-    parser.add_argument('--data_lines', help='How many lines your output file has')
-    parser.add_argument('--clear_path',
-                        help='If this flag is on, before the script starts creating new data files, all files in '
-                             'path_to_save_files that match file_name will be deleted.')
-    parser.add_argument('--multiprocessing', help='The number of processes used to create files', default=5)
-    #parser.add_argument('--clear_path', help='Clear all files in path_to_save_files that match file_name', action='store_true')
+                        choices=['count', 'random', 'uuid'], default=config["DEFAULT"]["file_prefix"])
+    parser.add_argument('--data_schema', help='Provide data Schema for your output files', default=config["DEFAULT"]["data_schema"])
+    parser.add_argument('--data_lines', help='How many lines your output file has', default=config["DEFAULT"]["data_lines"])
+    parser.add_argument('--multiprocessing', help='The number of processes used to create files',default=config["DEFAULT"]["multiprocessing"] )
+    parser.add_argument('--clear_path', help='Clear all files in path_to_save_files that match file_name', action='store_true')
     args = parser.parse_args()
 
     return args
@@ -246,6 +244,10 @@ def main():
         path = existing_dir(parsed_args.path_to_save_files)
         logging.debug(f"Path : {path}")
 
+    if parsed_args.clear_path and parsed_args.path_to_save_files and parsed_args.file_name:
+        logging.info("You decide to clear path before work")
+        clear_files_in_path(parsed_args.path_to_save_files, parsed_args.file_name)
+
     if parsed_args.path_to_save_files is None and parsed_args.files_count is not None:
         logging.info("You didn't choose the path dir, so path is current file ")
 
@@ -270,5 +272,4 @@ def main():
 
 
 if __name__ == '__main__':
-
     main()
