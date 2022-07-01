@@ -1,25 +1,22 @@
-import logging
-import json
-import os
-import creating_config_file
-import unittest
-import main
-import glob
-import random
-import re
+import configparser
+"""
+config = configparser.ConfigParser()
+config['DEFAULT'] = {'ServerAliveInterval': '45',
+                     'Compression': 'yes',
+                     'CompressionLevel': '9'}
+config['bitbucket.org'] = {}
+config['bitbucket.org']['User'] = 'hg'
+config['topsecret.server.com'] = {}
+topsecret = config['topsecret.server.com']
+topsecret['Port'] = '50022'     # mutates the parser
+topsecret['ForwardX11'] = 'no'  # same here
+config['DEFAULT']['ForwardX11'] = 'yes'
+with open('example.ini', 'w') as configfile:
+  config.write(configfile)
+"""
 
-def clear_files_in_path(path, file_name):
-    main.existing_dir(path)
-    "check if path exists"
-    files = os.listdir(path)
-    result = []
-    for file in files:
-        if file.endswith("json"):
-            if file_name in file:
-                result.append(file)
-                new_dir = os.path.join(path, file)
-                logging.info(f"Delete file {file}")
-                os.remove(new_dir)
-
-if __name__ == '__main__':
-    clear_files_in_path("/Users/kpodlaska/Desktop", "grzybek")
+config = configparser.ConfigParser()
+config.read("example.ini")
+y='bitbucket.org' in config
+z=config['DEFAULT']['Compression']
+print(z,y)

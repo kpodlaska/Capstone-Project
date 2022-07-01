@@ -8,8 +8,9 @@ def create_config_ini():
                          'data_schema': "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": \"['client', 'partner', 'government']\"," \
                       "\"animal_type\": \"['cat', 'dog', 'monkey','tiger']\",\"age\": \"int:rand(1, 90)\",\"kids_number\": " \
                       "\"int:rand(1, 6)\"} ",
-                         'data_lines': '100'}
-    with open('deflaut.ini', 'w') as configfile:
+                         'data_lines': '100',
+                         'multiprocessing': '5'}
+    with open('deflault.ini', 'w') as configfile:
        config.write(configfile)
 
 if __name__ == '__main__':
