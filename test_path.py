@@ -1,12 +1,8 @@
 import json
-import random
 import pytest
-import unittest
-from unittest import mock
 import main
-import requests
 import os
-from requests.models import Response
+
 @staticmethod
 def validateJsonText(jsonText):
     try:
