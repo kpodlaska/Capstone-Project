@@ -7,3 +7,4 @@ log.log
 .DS_Store
 *.pyc
 project/env
+__pycache__/
