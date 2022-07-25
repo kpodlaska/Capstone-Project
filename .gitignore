@@ -1,0 +1,10 @@
+../env/
+venv/
+log.log
+.idea/
+.git_old/
+.pytest_cache/
+.DS_Store
+*.pyc
+project/env
+__pycache__/
