@@ -57,7 +57,7 @@ def create_list_of_fake_data(schema):
                 if naked_possibility.isdigit():
                     result.append(naked_possibility)
                 else:
-                    logging.error("You choose int type value for non int deflaut parameter. Value 6 was used instead")
+                    logging.error("You choose int type value for non int default parameter. Value 6 was used instead")
                     result.append(6)
             elif "rand" in possibility and len(possibility) > 3:
                 chars = re.findall(r"[\w']+", possibility)
@@ -86,7 +86,7 @@ def create_list_of_fake_data(schema):
                     result.append(naked_possibility)
                 else:
                     logging.error(
-                        "You choose str type value for non str deflaut parameter! Value MagicIsCool  was used instead")
+                        "You choose str type value for non str default parameter! Value MagicIsCool  was used instead")
                     result.append("MagicIsCool")
             elif "rand" in possibility:
                 value = creating_name_from_numbers_and_lowercase()
@@ -113,6 +113,9 @@ def existing_dir(prospective_dir):
         return prospective_dir
     else:
         logging.critical(f"Wrong path. Can't continue")
+
+
+
 
 
 def construct_files(file_name, prefix, how_many_files):
