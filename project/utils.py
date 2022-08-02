@@ -147,11 +147,10 @@ def create_output_file(f_line, d_schema, path, f_name):
     new_file_with_dir = os.path.join(path_to_file, f_name)
     lines = int(f_line)
     with open(new_file_with_dir, "w") as f:
-        list_ = []
         for i in range(lines):
-            data = str(create_fake_dict(d_schema))
-            list_.append(data)
-        json.dump(list_, f)
+            data = create_fake_dict(d_schema)
+            json.dump(data, f)
+            f.write('\n')
         logging.debug(f"File {f_name} created")
         return new_file_with_dir
 
@@ -168,3 +167,6 @@ def clear_files_in_path(path, file_name):
                 new_dir = os.path.join(path, file)
                 logging.info(f"Delete file {file}")
                 os.remove(new_dir)
+
+
+
