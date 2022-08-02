@@ -1,11 +1,12 @@
 """Hope for the best but plan for the worst"""
-import configparser
 import argparse
+import configparser
+import logging
 import os
 import utils
-from concurrent.futures import ThreadPoolExecutor
 
-import logging
+from concurrent.futures import ThreadPoolExecutor
+from creating_config_file import create_config_ini
 
 
 def init_arg_parser():
@@ -108,4 +109,5 @@ def main():
 
 
 if __name__ == '__main__':
+    create_config_ini()
     main()

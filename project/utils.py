@@ -1,14 +1,11 @@
-
-import os
-import uuid
-
-
-import logging
-import random
-import json
 from faker import Faker
+import json
+import logging
+import os
+import random
 import re
 from string import ascii_lowercase
+import uuid
 
 
 def create_value_list_from_schema(d_schema):
@@ -115,9 +112,6 @@ def existing_dir(prospective_dir):
         logging.critical(f"Wrong path. Can't continue")
 
 
-
-
-
 def construct_files(file_name, prefix, how_many_files):
     ext = "json"
     prefixes = []
@@ -136,8 +130,8 @@ def construct_files(file_name, prefix, how_many_files):
     for prefix_ in prefixes:
         full_filename = file_name+"_" + str(prefix_) + "."+ext
         full_filenames.append(full_filename)
-
     return full_filenames
+
 
 def create_data_without_output_file(lines, d_schema):
     if lines > 0:
@@ -145,7 +139,7 @@ def create_data_without_output_file(lines, d_schema):
             data = create_fake_dict(d_schema)
             print(f"{data}")
     else:
-        logging.critical("You can't proccess with {} number of lines".format(lines))
+        logging.critical("You can't process with {} number of lines".format(lines))
 
 
 def create_output_file(f_line, d_schema, path, f_name):
@@ -174,5 +168,3 @@ def clear_files_in_path(path, file_name):
                 new_dir = os.path.join(path, file)
                 logging.info(f"Delete file {file}")
                 os.remove(new_dir)
-
-#TODO: add argparse for this function
