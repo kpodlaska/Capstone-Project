@@ -1,14 +1,11 @@
-
-import os
-import uuid
-
-
-import logging
-import random
-import json
 from faker import Faker
+import json
+import logging
+import os
+import random
 import re
 from string import ascii_lowercase
+import uuid
 
 
 def create_value_list_from_schema(d_schema):
@@ -57,7 +54,7 @@ def create_list_of_fake_data(schema):
                 if naked_possibility.isdigit():
                     result.append(naked_possibility)
                 else:
-                    logging.error("You choose int type value for non int deflaut parameter. Value 6 was used instead")
+                    logging.error("You choose int type value for non int default parameter. Value 6 was used instead")
                     result.append(6)
             elif "rand" in possibility and len(possibility) > 3:
                 chars = re.findall(r"[\w']+", possibility)
@@ -86,7 +83,7 @@ def create_list_of_fake_data(schema):
                     result.append(naked_possibility)
                 else:
                     logging.error(
-                        "You choose str type value for non str deflaut parameter! Value MagicIsCool  was used instead")
+                        "You choose str type value for non str default parameter! Value MagicIsCool  was used instead")
                     result.append("MagicIsCool")
             elif "rand" in possibility:
                 value = creating_name_from_numbers_and_lowercase()
@@ -108,11 +105,22 @@ def existing_dir(prospective_dir):
         logging.debug(f"You are in current directory. Path : {prospective_dir}")
         return prospective_dir
     elif os.path.isfile(prospective_dir):
+        logging.debug(f"Your directory is  file not a dir. Parent DIR used as a path")
+        prospective_dir = os.path.dirname(os.path.abspath(prospective_dir))
         return prospective_dir
     elif os.path.isdir(prospective_dir):
         return prospective_dir
     else:
-        logging.critical(f"Wrong path. Can't continue")
+
+        try:
+            os.makedirs(prospective_dir, exist_ok=True)
+            created_dir = os.path.abspath(prospective_dir)
+            logging.info(f"Your directory {prospective_dir} has been created successfully. "
+                         f"Absolute path to dir is {created_dir}")
+
+        except OSError:
+            print("Directory '%s' can not be created")
+            logging.critical(f"Wrong path. Can't continue")
 
 
 def construct_files(file_name, prefix, how_many_files):
@@ -133,8 +141,8 @@ def construct_files(file_name, prefix, how_many_files):
     for prefix_ in prefixes:
         full_filename = file_name+"_" + str(prefix_) + "."+ext
         full_filenames.append(full_filename)
-
     return full_filenames
+
 
 def create_data_without_output_file(lines, d_schema):
     if lines > 0:
@@ -142,7 +150,7 @@ def create_data_without_output_file(lines, d_schema):
             data = create_fake_dict(d_schema)
             print(f"{data}")
     else:
-        logging.critical("You can't proccess with {} number of lines".format(lines))
+        logging.critical("You can't process with {} number of lines".format(lines))
 
 
 def create_output_file(f_line, d_schema, path, f_name):
@@ -150,11 +158,10 @@ def create_output_file(f_line, d_schema, path, f_name):
     new_file_with_dir = os.path.join(path_to_file, f_name)
     lines = int(f_line)
     with open(new_file_with_dir, "w") as f:
-        list_ = []
         for i in range(lines):
-            data = str(create_fake_dict(d_schema))
-            list_.append(data)
-        json.dump(list_, f)
+            data = create_fake_dict(d_schema)
+            json.dump(data, f)
+            f.write('\n')
         logging.debug(f"File {f_name} created")
         return new_file_with_dir
 
@@ -171,5 +178,3 @@ def clear_files_in_path(path, file_name):
                 new_dir = os.path.join(path, file)
                 logging.info(f"Delete file {file}")
                 os.remove(new_dir)
-
-#TODO: add argparse for this function
