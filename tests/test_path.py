@@ -3,38 +3,16 @@ import pytest
 from project.utils import create_fake_dict, create_output_file, existing_dir, clear_files_in_path, construct_files
 import os
 
-@staticmethod
-def validateJsonText(jsonText):
-    try:
-        json.loads(jsonText)
-    except ValueError as err:
-        print(err)
-        return False
-    return True
-
-
-def test_dict_len_matches_key_number():
-    data_schema = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": \"['client', 'partner', 'government']\"," \
+DATA_SCHEMA = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": \"['client', 'partner', 'government']\"," \
                   "\"animal_type\": \"['cat', 'dog', 'monkey','tiger']\",\"age\": \"int:rand(1, 90)\",\"kids_number\": " \
                   "\"int:rand(1, 6)\"} "
-    dict_given = create_fake_dict(data_schema)
-    dict_values = dict_given.values()
-    dict_keys = dict_given.keys()
-    assert len(dict_values) == len(dict_keys)
+ABSOLUTE_PATH = os.path.dirname(os.path.abspath("main.py"))
+PATH = os.path.join(ABSOLUTE_PATH, "results")
+FILE_NAME = "magic_file_generator.json"
+GIVEN_PREFIX = "count"
+DEFAULT_FILE_LINES = 5
+TESTED_FILE_NUMBER = 10
 
-def test_add_lines_to_file():
-    file_name = "magic_file_generator.json"
-    d_schema = "{\"date\": \"timestamp:\"} "
-    path = "/Users/kpodlaska/Desktop"
-    f_line_given = 10
-    file_given = create_output_file(f_line_given, d_schema, path, file_name)
-    print(file_given)
-    f = open(file_given)
-    data = json.load(f)
-    f.close()
-    assert f_line_given == len(data)
-
-@staticmethod
 def count_files_in_path(path, file_name):
     existing_dir(path)
     "check if path exists"
@@ -46,44 +24,71 @@ def count_files_in_path(path, file_name):
                 result.append(file)
     return len(result)
 
+def validateJsonText(jsonText):
+    try:
+        json.loads(jsonText)
+    except ValueError as err:
+        print(err)
+        return False
+    return True
 
 
-def test_creating_number_of_files():
-    expected_value = 1
-    d_schema = "{\"date\": \"timestamp:\"} "
-    f_name = "test_file_for_testing_path.json"
-    path= "/Users/kpodlaska/Desktop"
-    cleaning_before_testing = clear_files_in_path(path, f_name)
-    create_output_file(20, d_schema, path, f_name)
-    assert count_files_in_path(path, f_name) == expected_value
+def test_dict_len_matches_key_number():
+    dict_given = create_fake_dict(DATA_SCHEMA)
+    dict_values = dict_given.values()
+    dict_keys = dict_given.keys()
+    assert len(dict_values) == len(dict_keys)
+
+def test_write_to_file():
+    f_line_given = 1
+    file_given = create_output_file(f_line_given, DATA_SCHEMA, PATH, FILE_NAME)
+    print(file_given)
+    with open(file_given) as file:
+        lines = json.load(file)
+    assert bool(lines) == True
+
+lines_of_data = [(1), (2),(4), (7), (10), (19), (32)]
+
+@pytest.mark.parametrize("f_line_given", lines_of_data)
+def test_add_lines_to_file(f_line_given):
+    file_given = create_output_file(f_line_given, DATA_SCHEMA, PATH, FILE_NAME)
+    list_of_rows = [json.loads(line) for line in open(file_given, 'r')]
+    """clear data after getting result"""
+    clear_files_in_path(PATH, FILE_NAME)
+    assert len(list_of_rows) == f_line_given
+
+
+data = [(1), (2),(4), (7), (20)]
+
+@pytest.mark.parametrize("expected_value", data)
+def test_created_number_of_files(expected_value):
+    files = construct_files(FILE_NAME, GIVEN_PREFIX, expected_value)
+    """clear data before test"""
+    clear_files_in_path(PATH, FILE_NAME)
+    for file in files:
+        create_output_file(DEFAULT_FILE_LINES, DATA_SCHEMA, PATH, file)
+    assert count_files_in_path(PATH, FILE_NAME) == expected_value
 
 
 
 def test_clear_path():
-        how_many_files = 5
-        f_line = 1
-        d_schema = "{\"date\": \"timestamp:\"} "
-        f_name = "test_file_for_testing_path.json"
-        prefix="count"
-        path = "/Users/kpodlaska/Desktop"
-        cleaning_before_testing = clear_files_in_path(path, f_name)
+    """create output file"""
+    create_output_file(DEFAULT_FILE_LINES, DATA_SCHEMA, PATH, FILE_NAME)
+    if count_files_in_path(PATH, FILE_NAME) > 0:
+        clear_files_in_path(PATH, FILE_NAME)
+        assert count_files_in_path(PATH, FILE_NAME) == 0
+    else:
+        assert False == True
 
-        files = construct_files(f_name, prefix, how_many_files)
-        for file in files:
-            created_file = create_output_file(f_line, d_schema, path, file)
-        assert count_files_in_path(path, f_name) == how_many_files
-
-
-def test_data_schema_is_json_format(self):
-    data_schema = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": \"['client', 'partner', 'government']\"," \
-                  "\"animal_type\": \"['cat', 'dog', 'monkey','tiger']\",\"age\": \"int:rand(1, 90)\",\"kids_number\": " \
-                  "\"int:rand(1, 6)\"} "
-    assert validateJsonText(data_schema) == True
-
+def test_data_schema_is_json_format():
+    assert validateJsonText(DATA_SCHEMA) == True
 
 
 def test_save_file_on_disc():
-        pass
+    """clear data before test"""
+    clear_files_in_path(PATH, FILE_NAME)
+    create_output_file(DEFAULT_FILE_LINES, DATA_SCHEMA, PATH, FILE_NAME)
+    assert count_files_in_path(PATH, FILE_NAME) == 1
 
 
 testdata = [("{\"age\": \"int:rand(1:90)\"} ", True),("{\"kids_number\": \"int:rand(1:6)\"} ",True), ("{\"favourite_number\": \"int\"} ",True)]
@@ -100,6 +105,7 @@ test_schema = [("{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": \"['
 @pytest.mark.parametrize("given, expected", test_schema)
 def test_data_schema_is_json_format(given, expected):
     assert validateJsonText(given) == expected
+
 
 
 
