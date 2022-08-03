@@ -178,3 +178,9 @@ def clear_files_in_path(path, file_name):
                 new_dir = os.path.join(path, file)
                 logging.info(f"Delete file {file}")
                 os.remove(new_dir)
+
+if __name__ == '__main__':
+    data_schema2 = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": \"['client', 'partner', 'government']\",\"animal_type\": \"['cat', 'dog', 'monkey','tiger']\",\"age\": \"int:rand(1, 90)\",\"kids_number\": \"int:rand(1, 6)\"} "
+    x=create_fake_dict(data_schema2).values()
+    print(x)
+    print(type(create_fake_dict(data_schema2).values()))

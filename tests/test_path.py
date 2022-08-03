@@ -3,15 +3,17 @@ import pytest
 from project.utils import create_fake_dict, create_output_file, existing_dir, clear_files_in_path, construct_files
 import os
 
+
 DATA_SCHEMA = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": \"['client', 'partner', 'government']\"," \
-                  "\"animal_type\": \"['cat', 'dog', 'monkey','tiger']\",\"age\": \"int:rand(1, 90)\",\"kids_number\": " \
-                  "\"int:rand(1, 6)\"} "
+                    "\"animal_type\": \"['cat', 'dog', 'monkey','tiger']\",\"age\": \"int:rand(1, 90)\"," \
+                    "\"kids_number\": \"int:rand(1, 6)\"} "
 ABSOLUTE_PATH = os.path.dirname(os.path.abspath("main.py"))
 PATH = os.path.join(ABSOLUTE_PATH, "results")
 FILE_NAME = "magic_file_generator.json"
 GIVEN_PREFIX = "count"
 DEFAULT_FILE_LINES = 5
 TESTED_FILE_NUMBER = 10
+
 
 def count_files_in_path(path, file_name):
     existing_dir(path)
@@ -24,9 +26,10 @@ def count_files_in_path(path, file_name):
                 result.append(file)
     return len(result)
 
-def validateJsonText(jsonText):
+
+def validate_json_text(json_text):
     try:
-        json.loads(jsonText)
+        json.loads(json_text)
     except ValueError as err:
         print(err)
         return False
@@ -39,15 +42,19 @@ def test_dict_len_matches_key_number():
     dict_keys = dict_given.keys()
     assert len(dict_values) == len(dict_keys)
 
+
 def test_write_to_file():
     f_line_given = 1
     file_given = create_output_file(f_line_given, DATA_SCHEMA, PATH, FILE_NAME)
     print(file_given)
     with open(file_given) as file:
         lines = json.load(file)
-    assert bool(lines) == True
+    given = True
+    assert bool(lines) == given
 
-lines_of_data = [(1), (2),(4), (7), (10), (19), (32)]
+
+lines_of_data = [1, 2, 4, 7, 10, 19, 32]
+
 
 @pytest.mark.parametrize("f_line_given", lines_of_data)
 def test_add_lines_to_file(f_line_given):
@@ -58,7 +65,8 @@ def test_add_lines_to_file(f_line_given):
     assert len(list_of_rows) == f_line_given
 
 
-data = [(1), (2),(4), (7), (20)]
+data = [1, 3, 4, 6, 10]
+
 
 @pytest.mark.parametrize("expected_value", data)
 def test_created_number_of_files(expected_value):
@@ -70,7 +78,6 @@ def test_created_number_of_files(expected_value):
     assert count_files_in_path(PATH, FILE_NAME) == expected_value
 
 
-
 def test_clear_path():
     """create output file"""
     create_output_file(DEFAULT_FILE_LINES, DATA_SCHEMA, PATH, FILE_NAME)
@@ -78,10 +85,12 @@ def test_clear_path():
         clear_files_in_path(PATH, FILE_NAME)
         assert count_files_in_path(PATH, FILE_NAME) == 0
     else:
-        assert False == True
+        assert False
+
 
 def test_data_schema_is_json_format():
-    assert validateJsonText(DATA_SCHEMA) == True
+    given = True
+    assert validate_json_text(DATA_SCHEMA) == given
 
 
 def test_save_file_on_disc():
@@ -91,7 +100,9 @@ def test_save_file_on_disc():
     assert count_files_in_path(PATH, FILE_NAME) == 1
 
 
-testdata = [("{\"age\": \"int:rand(1:90)\"} ", True),("{\"kids_number\": \"int:rand(1:6)\"} ",True), ("{\"favourite_number\": \"int\"} ",True)]
+testdata = [("{\"age\": \"int:rand(1:90)\"} ", True), ("{\"kids_number\": \"int:rand(1:6)\"} ", True),
+            ("{\"favourite_number\": \"int\"} ", True)]
+
 
 @pytest.mark.parametrize("a, expected", testdata)
 def test_is_digit(a, expected):
@@ -100,12 +111,41 @@ def test_is_digit(a, expected):
     assert (int(given)/1).is_integer() == expected
 
 
-test_schema = [("{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": \"['client', 'partner', 'government']\",\"age\": \"int:rand(1, 90)\"} ", True), ("{name: str:rand}", False), ("I'm not json format", False)]
+data_type = [("{\"age\": \"int:rand(1:90)\"} ", int), ("{\"kids_number\": \"int:rand(1:6)\"} ", int),
+             ("{\"favourite_number\": \"int\"} ", int), ("{\"name\": \"str:rand\"} ", str),
+             ("{\"type\": \"['client', 'partner', 'government']\"} ", str),
+             ("{\"animal_type\": \"['cat', 'dog', 'monkey','tiger']\"} ", str), ("{\"date\": \"timestamp\"} ", float)]
+
+
+@pytest.mark.parametrize("a, b", data_type)
+def test_data_type(a, b):
+    values = create_fake_dict(a).values()
+    for value in values:
+        given = True
+        assert isinstance(value, b) == given
+
+
+test_schema = [("{\"date\": \"timestamp:\","
+                "\"name\": \"str:rand\","
+                "\"type\": \"['client', 'partner', 'government']\","
+                "\"age\": \"int:rand(1, 90)\"} ", True),
+               ("{name: str:rand}", False)]
+
 
 @pytest.mark.parametrize("given, expected", test_schema)
 def test_data_schema_is_json_format(given, expected):
-    assert validateJsonText(given) == expected
+    assert validate_json_text(given) == expected
 
 
+"""
+    
+Write a parameterized test for different data types.
+Write a parameterized test for different data schemas.
+Write a test that uses temporary files to test your program when the data schema is loaded with a json file. 
+You have to use fixtures here.
+Test for the “clear_path” action.
+Test to check saving file to the disk.
+Write a test to check a number of created files if “multiprocessing” > 1.
+Write your own test."""
 
 
