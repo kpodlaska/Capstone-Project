@@ -105,11 +105,22 @@ def existing_dir(prospective_dir):
         logging.debug(f"You are in current directory. Path : {prospective_dir}")
         return prospective_dir
     elif os.path.isfile(prospective_dir):
+        logging.debug(f"Your directory is  file not a dir. Parent DIR used as a path")
+        prospective_dir = os.path.dirname(os.path.abspath(prospective_dir))
         return prospective_dir
     elif os.path.isdir(prospective_dir):
         return prospective_dir
     else:
-        logging.critical(f"Wrong path. Can't continue")
+
+        try:
+            os.makedirs(prospective_dir, exist_ok=True)
+            created_dir = os.path.abspath(prospective_dir)
+            logging.info(f"Your directory {prospective_dir} has been created successfully. "
+                         f"Absolute path to dir is {created_dir}")
+
+        except OSError:
+            print("Directory '%s' can not be created")
+            logging.critical(f"Wrong path. Can't continue")
 
 
 def construct_files(file_name, prefix, how_many_files):

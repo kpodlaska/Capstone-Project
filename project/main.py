@@ -65,16 +65,7 @@ def main():
     logging.debug(f'Name of your files is {parsed_args.file_name} with prefixes {parsed_args.file_prefix}. '
                   f'Every file have {parsed_args.data_lines} lines')
 
-    if parsed_args.path_to_save_files == ".":
-        path = os.getcwd()
-        logging.debug(f"You are in current directory. Path : {path}")
-    else:
-        path = utils.existing_dir(parsed_args.path_to_save_files)
-        logging.debug(f"Path : {path}")
 
-    if parsed_args.clear_path and parsed_args.path_to_save_files and parsed_args.file_name:
-        logging.info("You decide to clear path before work")
-        utils.clear_files_in_path(parsed_args.path_to_save_files, parsed_args.file_name)
 
     if parsed_args.clear_path:
         logging.info("Cleared data before generating files")
@@ -82,10 +73,8 @@ def main():
     if int(parsed_args.multiprocessing) <= 0:
         logging.error(f"You chose {parsed_args.multiprocessing} number of processes used to create files. Can't be less than 0")
 
-    if parsed_args.path_to_save_files is None and parsed_args.files_count is not None:
-        logging.info("You didn't choose the path dir, so path is current file ")
 
-    if int(parsed_args.files_count) > 0 and (parsed_args.file_name, parsed_args.file_prefix, parsed_args.path_to_save_files, parsed_args.data_lines, parsed_args.data_schema) is not None:
+    if int(parsed_args.files_count) > 0:
         logging.debug(f'The number of processes used to create files is {parsed_args.multiprocessing}')
         files = utils.construct_files(parsed_args.file_name, parsed_args.file_prefix, parsed_args.files_count)
         workers_number = int(parsed_args.multiprocessing)
@@ -96,18 +85,34 @@ def main():
             futures = [executor.submit(utils.create_output_file, parsed_args.data_lines, parsed_args.data_schema, parsed_args.path_to_save_files, file) for file in files]
         logging.info(f"All files created. Created {len(futures)} files")
 
-    if int(parsed_args.files_count) == 0 and (parsed_args.data_lines, parsed_args.data_schema) is not None:
+    if int(parsed_args.files_count) == 0:
         logging.info("You choose to generate 0 files, so result is printed without output file, nor file_name, file_prefix or path_to_save_files won't needed")
         lines = int(parsed_args.data_lines)
         utils.create_data_without_output_file(lines, parsed_args.data_schema)
+
     if int(parsed_args.files_count) < 0:
         logging.error("Incorrect value!!! There is no possibility to generate {}. Put positive number or zero to "
                       "generate answer without output files".format(parsed_args.files_count))
 
-    if parsed_args.file_name is not None and parsed_args.file_prefix is not None and int(parsed_args.files_count) > 0 and int(parsed_args.data_lines) > 0 and parsed_args.data_schema is not None:
+    if int(parsed_args.files_count) > 0 and int(parsed_args.data_lines) > 0:
         logging.info(f"You generated {parsed_args.files_count} file with {parsed_args.data_lines} lines named: {parsed_args.file_name} with prefix {parsed_args.file_prefix} method")
 
 
 if __name__ == '__main__':
-    create_config_ini()
-    main()
+    #create_config_ini()
+    #main()
+    parent = os.path.dirname("creating_config_file.py")
+    parent1 = os.path.dirname(os.path.abspath("creating_config_file.py"))
+    parent2 = os.path.abspath("creating_config_file.py")
+    parent3= os.path.dirname("creating_config_file.py")
+    path="results/ziemniak/dwa_ziemniaki/test"
+    try:
+        os.makedirs("results/ziemniak/dwa_ziemniaki/test", exist_ok=True)
+        x=os.path.abspath(path)
+
+        print("Directory '%s' created successfully"  % x)
+    except OSError as error:
+        print("Directory '%s' can not be created")
+
+    print("Parent directory", parent,"siemka", parent1,"jak", parent2,"leci", parent3)
+
