@@ -135,17 +135,3 @@ test_schema = [("{\"date\": \"timestamp:\","
 @pytest.mark.parametrize("given, expected", test_schema)
 def test_data_schema_is_json_format(given, expected):
     assert validate_json_text(given) == expected
-
-
-"""
-    
-Write a parameterized test for different data types.
-Write a parameterized test for different data schemas.
-Write a test that uses temporary files to test your program when the data schema is loaded with a json file. 
-You have to use fixtures here.
-Test for the “clear_path” action.
-Test to check saving file to the disk.
-Write a test to check a number of created files if “multiprocessing” > 1.
-Write your own test."""
-
-
