@@ -12,11 +12,12 @@ def create_config_ini():
                          'files_count': '1',
                          'file_name': 'fake_data_file',
                          'file_prefix': 'count',
-                         'data_schema': "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": "
-                                        "\"['client', 'partner', 'government']\","
-                                        "\"animal_type\": \"['cat', 'dog', 'monkey','tiger']\",\"age\": "
-                                        "\"int:rand(1, 90)\",\"kids_number\": "
-                                        "\"int:rand(1, 6)\"} ",
+                         'data_schema': "{\"date\": \"timestamp:\","
+                                        "\"name\": \"str:rand\","
+                                        "\"type\": \"['client', 'partner', 'government']\","
+                                        "\"animal_type\": \"['cat', 'dog', 'monkey','tiger']\","
+                                        "\"age\": \"int:rand(1, 90)\","
+                                        "\"kids_number\": \"int:rand(1, 6)\"} ",
                                         'data_lines': '100',
                                         'multiprocessing': '5'}
     config_file_path = str(os.path.join(ABSOLUTE_PATH, "project/", "default.ini"))

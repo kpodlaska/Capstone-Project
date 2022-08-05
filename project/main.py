@@ -4,6 +4,7 @@ import configparser
 import logging
 import os
 import utils
+from time import perf_counter
 
 from concurrent.futures import ThreadPoolExecutor
 from creating_config_file import create_config_ini
@@ -93,6 +94,7 @@ def main():
                       f"Can't be less than 0")
 
     if int(parsed_args.files_count) > 0:
+        t1_start = perf_counter()
         logging.debug(f'The number of processes used to create files is {parsed_args.multiprocessing}')
         files = utils.construct_files(parsed_args.file_name, parsed_args.file_prefix, parsed_args.files_count)
         workers_number = int(parsed_args.multiprocessing)
@@ -100,10 +102,17 @@ def main():
             logging.info(f"Value of multiprocessing is higher than CPUs in the system. "
                          f"Max CPU {number_of_processes} used instead")
             workers_number = number_of_processes
+
         with ThreadPoolExecutor(max_workers=workers_number) as executor:
-            futures = [executor.submit(utils.create_output_file, parsed_args.data_lines, parsed_args.data_schema,
-                                       parsed_args.path_to_save_files, file) for file in files]
-        logging.info(f"All files created. Created {len(futures)} files")
+            for file in files:
+                executor.submit(utils.create_output_file, parsed_args.data_lines, parsed_args.data_schema, parsed_args.path_to_save_files, file)
+        t1_stop = perf_counter()
+        logging.info(f"It took {t1_stop-t1_start}  second(s) to create all file(s).")
+
+            #for file in files:
+             #   executor.submit(utils.create_output_file, parsed_args.data_lines, parsed_args.data_schema,
+             #                   parsed_args.path_to_save_files, file)
+
 
     if int(parsed_args.files_count) == 0:
         logging.info("You choose to generate 0 files, so result is printed without output file, "
