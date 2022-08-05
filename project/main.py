@@ -105,14 +105,10 @@ def main():
 
         with ThreadPoolExecutor(max_workers=workers_number) as executor:
             for file in files:
-                executor.submit(utils.create_output_file, parsed_args.data_lines, parsed_args.data_schema, parsed_args.path_to_save_files, file)
+                executor.submit(utils.create_output_file, parsed_args.data_lines, parsed_args.data_schema,
+                                parsed_args.path_to_save_files, file)
         t1_stop = perf_counter()
         logging.info(f"It took {t1_stop-t1_start}  second(s) to create all file(s).")
-
-            #for file in files:
-             #   executor.submit(utils.create_output_file, parsed_args.data_lines, parsed_args.data_schema,
-             #                   parsed_args.path_to_save_files, file)
-
 
     if int(parsed_args.files_count) == 0:
         logging.info("You choose to generate 0 files, so result is printed without output file, "
