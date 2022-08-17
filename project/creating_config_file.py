@@ -20,7 +20,7 @@ def create_config_ini():
                                         "\"kids_number\": \"int:rand(1, 6)\"} ",
                                         'data_lines': '100',
                                         'multiprocessing': '5'}
-    config_file_path = str(os.path.join(ABSOLUTE_PATH, "project/", "default.ini"))
+    config_file_path = str(os.path.join(ABSOLUTE_PATH, "default.ini"))
     with open(config_file_path, 'w') as configfile:
         config.write(configfile)
 
